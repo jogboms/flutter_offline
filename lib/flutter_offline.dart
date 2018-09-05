@@ -1,3 +1,9 @@
 library flutter_offline;
 
-export 'src/main.dart';
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+
+part 'src/delegate.dart';
+part 'src/main.dart';
