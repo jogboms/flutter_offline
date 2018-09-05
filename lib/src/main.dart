@@ -1,51 +1,60 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/widgets.dart';
-
-typedef Widget OfflineWidgetBuilder(BuildContext context, bool snapshot);
+import 'package:flutter/material.dart';
 
 class OfflineBuilder extends StatefulWidget {
-  final OfflineWidgetBuilder builder;
+  final OfflineBuilderDelegate delegate;
 
   const OfflineBuilder({
     Key key,
-    @required this.builder,
+    @required this.delegate,
   }) : super(key: key);
 
   @override
-  OfflineBuilderState createState() {
-    return new OfflineBuilderState();
-  }
+  OfflineBuilderState createState() => new OfflineBuilderState();
 }
 
 class OfflineBuilderState extends State<OfflineBuilder> {
+  final _connectivity = new Connectivity();
+
   @override
   Widget build(BuildContext context) {
-    final _connectivity = new Connectivity();
     return FutureBuilder<ConnectivityResult>(
       future: _connectivity.checkConnectivity(),
-      builder: (BuildContext context, snapshot) {
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: Text("wait..."));
+          return widget.delegate.waitBuilder(context);
         }
         return new StreamBuilder<ConnectivityResult>(
           initialData: snapshot.data,
           stream: _connectivity.onConnectivityChanged,
-          builder: (BuildContext context, snapshot) {
+          builder: (context, snapshot) {
             final _state = snapshot.data != ConnectivityResult.none;
 
-            return Center(
-              child: Container(
-                height: 250.0,
-                width: 250.0,
-                color: _state ? Color(0xFF00EE44) : Color(0xFFEE4400),
-                child: Center(
-                  child: Text("${_state.toString()}"),
-                ),
-              ),
-            );
+            final _offlineView =
+                widget.delegate.offlineBuilder(context, _state);
+
+            if (_offlineView != null) {
+              return _offlineView;
+            }
+
+            return widget.delegate.builder(context, _state);
           },
         );
       },
     );
   }
+}
+
+abstract class OfflineBuilderDelegate {
+  Duration delay = const Duration(milliseconds: 350);
+
+  Widget waitBuilder(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget offlineBuilder(BuildContext context, bool state) {
+    return null;
+  }
+
+  Widget builder(BuildContext context, bool state);
 }
