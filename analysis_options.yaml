@@ -28,7 +28,7 @@ analyzer:
     implicit-dynamic: false
   errors:
     # treat missing required parameters as a warning (not a hint)
-    missing_required_param: warning
+    # missing_required_param: warning
     # treat missing returns as a warning (not a hint)
     missing_return: warning
     # allow having TODOs in the code
