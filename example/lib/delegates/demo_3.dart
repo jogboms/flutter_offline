@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
-class Demo2OfflineDelegate extends OfflineBuilderDelegate {
+class Demo3OfflineDelegate extends OfflineBuilderDelegate {
+  @override
+  Duration delay = Duration(seconds: 3);
+
   @override
   Widget offlineBuilder(BuildContext context, bool state) {
     return Container(
-      color: Colors.white,
+      color: Colors.white70,
       child: Center(
         child: Text(
-          "Oops, \n\nNow we are Offline!",
+          "Oops, \n\nWe experienced a Delayed Offline!",
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -26,6 +29,9 @@ class Demo2OfflineDelegate extends OfflineBuilderDelegate {
           ),
           new Text(
             'Just turn off your internet.',
+          ),
+          new Text(
+            'This one has a bit of a delay.',
           ),
         ],
       ),
