@@ -1,0 +1,17 @@
+name: flutter_offline
+description: A new flutter package project.
+version: 0.0.1
+author: Jeremiah Ogbomo <jeremiahogbomo@gmail.com>
+homepage: https://github.com/jogboms/flutter_offline
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  connectivity: ^0.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
