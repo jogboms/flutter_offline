@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 void main() => runApp(new MyApp());
 
@@ -27,18 +28,22 @@ class MyHomePage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text(title),
       ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'There are no bottons to push :)',
+      body: OfflineBuilder(
+        builder: (BuildContext context, bool state) {
+          return new Center(
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text(
+                  'There are no bottons to push :)',
+                ),
+                new Text(
+                  'Just turn off your internet.',
+                ),
+              ],
             ),
-            new Text(
-              'Just turn off your internet.',
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
