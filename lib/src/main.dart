@@ -30,8 +30,9 @@ class OfflineBuilderState extends State<OfflineBuilder> {
           builder: (context, snapshot) {
             final _state = snapshot.data != ConnectivityResult.none;
 
-            final _offlineView =
-                widget.delegate.offlineBuilder(context, _state);
+            final _offlineView = _state == false
+                ? widget.delegate.offlineBuilder(context, _state)
+                : null;
 
             if (_offlineView != null) {
               return _offlineView;

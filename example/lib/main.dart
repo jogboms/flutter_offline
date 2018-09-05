@@ -1,4 +1,5 @@
 import 'package:example/delegates/demo_1.dart';
+import 'package:example/delegates/demo_2.dart';
 import 'package:example/demo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
               RaisedButton(
                 child: Text("Demo 2"),
                 onPressed: () {
-                  navigate(context, Demo1OfflineDelegate());
+                  navigate(context, Demo2OfflineDelegate());
                 },
               ),
               RaisedButton(
