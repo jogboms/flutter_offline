@@ -1,6 +1,6 @@
 name: flutter_offline
-description: A new flutter package project.
-version: 0.0.1
+description: Handle offline/online connectivity in Flutter like a Boss.
+version: 0.1.0
 author: Jeremiah Ogbomo <jeremiahogbomo@gmail.com>
 homepage: https://github.com/jogboms/flutter_offline
 
