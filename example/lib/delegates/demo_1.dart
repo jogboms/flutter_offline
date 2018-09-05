@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
-class DefaultOfflineDelegate extends OfflineBuilderDelegate {
+class Demo1OfflineDelegate extends OfflineBuilderDelegate {
   @override
   Widget builder(BuildContext context, bool state) {
     return new Stack(
