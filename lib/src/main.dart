@@ -1,5 +1,4 @@
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
+part of flutter_offline;
 
 class OfflineBuilder extends StatefulWidget {
   final OfflineBuilderDelegate delegate;
@@ -26,7 +25,9 @@ class OfflineBuilderState extends State<OfflineBuilder> {
         }
         return new StreamBuilder<ConnectivityResult>(
           initialData: snapshot.data,
-          stream: _connectivity.onConnectivityChanged,
+          stream: _connectivity.onConnectivityChanged.distinct().asyncMap(
+                (event) => Future.delayed(widget.delegate.delay, () => event),
+              ),
           builder: (context, snapshot) {
             final _state = snapshot.data != ConnectivityResult.none;
 
@@ -44,18 +45,4 @@ class OfflineBuilderState extends State<OfflineBuilder> {
       },
     );
   }
-}
-
-abstract class OfflineBuilderDelegate {
-  Duration delay = const Duration(milliseconds: 350);
-
-  Widget waitBuilder(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
-  }
-
-  Widget offlineBuilder(BuildContext context, bool state) {
-    return null;
-  }
-
-  Widget builder(BuildContext context, bool state);
 }
