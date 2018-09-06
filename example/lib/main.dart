@@ -1,8 +1,9 @@
-import 'package:example/demo_page.dart';
-import 'package:example/widgets/demo_1.dart';
-import 'package:example/widgets/demo_2.dart';
-import 'package:example/widgets/demo_3.dart';
 import 'package:flutter/material.dart';
+
+import './demo_page.dart';
+import './widgets/demo_1.dart';
+import './widgets/demo_2.dart';
+import './widgets/demo_3.dart';
 
 void main() => runApp(new MyApp());
 
