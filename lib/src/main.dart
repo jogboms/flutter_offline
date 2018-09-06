@@ -1,48 +1,85 @@
-part of flutter_offline;
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+
+
+typedef Widget ConnectivityBuilder(BuildContext context,
+	ConnectivityResult connectivity, Widget child);
+
+abstract class ConnectivityService {
+	Stream<ConnectivityResult> get onConnectivityChanged;
+}
 
 class OfflineBuilder extends StatefulWidget {
-  final OfflineBuilderDelegate delegate;
 
-  const OfflineBuilder({
-    Key key,
-    @required this.delegate,
-  }) : super(key: key);
+	const OfflineBuilder({
+		Key key,
+		this.connectivityService,
+		this.debounceDuration = const Duration(seconds: 3),
+		@required this.connectivityBuilder,
+		this.builder,
+		this.child,
+	})
+		:
+	// FIXME assert(builder != null && child != null, 'You can only specify builder or child, not both'),
+			super(key: key);
 
-  @override
-  OfflineBuilderState createState() => new OfflineBuilderState();
+	/// Allows you to override connectivity service
+	final ConnectivityService connectivityService;
+
+	final Duration debounceDuration;
+	final ConnectivityBuilder connectivityBuilder;
+	final WidgetBuilder builder;
+	final Widget child;
+
+	@override
+	OfflineBuilderState createState() => OfflineBuilderState();
 }
 
 class OfflineBuilderState extends State<OfflineBuilder> {
-  final _connectivity = new Connectivity();
+	Stream<ConnectivityResult> _connectivityStream;
+	bool _seenFirstData = false;
+	Timer _debounceTimer;
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ConnectivityResult>(
-      future: _connectivity.checkConnectivity(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return widget.delegate.waitBuilder(context);
-        }
-        return new StreamBuilder<ConnectivityResult>(
-          initialData: snapshot.data,
-          stream: _connectivity.onConnectivityChanged.distinct().asyncMap(
-                (event) => Future.delayed(widget.delegate.delay, () => event),
-              ),
-          builder: (context, snapshot) {
-            final _state = snapshot.data != ConnectivityResult.none;
+	@override
+	void initState() {
+		super.initState();
+		Stream<ConnectivityResult> stream;
+		if (widget.connectivityService != null) {
+			stream = widget.connectivityService.onConnectivityChanged;
+		} else {
+			stream = Connectivity().onConnectivityChanged;
+		}
+		_connectivityStream = stream
+			.distinct()
+			.transform(StreamTransformer.fromHandlers<ConnectivityResult, ConnectivityResult>(
+			handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
+				if (_seenFirstData) {
+					_debounceTimer?.cancel();
+					_debounceTimer = Timer(widget.debounceDuration, () => sink.add(data));
+				} else {
+					sink.add(data);
+					_seenFirstData = true;
+				}
+			},
+			handleDone: (EventSink<ConnectivityResult> sink) => _debounceTimer?.cancel(),
+		));
+	}
 
-            final _offlineView = _state == false
-                ? widget.delegate.offlineBuilder(context, _state)
-                : null;
-
-            if (_offlineView != null) {
-              return _offlineView;
-            }
-
-            return widget.delegate.builder(context, _state);
-          },
-        );
-      },
-    );
-  }
+	@override
+	Widget build(BuildContext context) {
+		return StreamBuilder<ConnectivityResult>(
+			stream: _connectivityStream,
+			builder: (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
+				final child = widget.child ?? widget.builder(context);
+				if (!snapshot.hasData) {
+					return SizedBox();
+				} else if (snapshot.hasError) {
+					return ErrorWidget(snapshot.error);
+				}
+				return widget.connectivityBuilder(context, snapshot.data, child);
+			},
+		);
+	}
 }
