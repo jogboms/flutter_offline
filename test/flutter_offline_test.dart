@@ -158,22 +158,41 @@ void main() {
     });
   });
 
-  testWidgets('Test for Platform Error', (WidgetTester tester) async {
-    final service = TestConnectivityService(ConnectivityResult.none);
+  group("Test Platform Errors", () {
+    testWidgets('Test w/o errorBuilder', (WidgetTester tester) async {
+      final service = TestConnectivityService(ConnectivityResult.none);
 
-    await tester.pumpWidget(MaterialApp(
-      home: OfflineBuilder(
-        connectivityService: service,
-        connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-            Text('$connectivity'),
-        child: SizedBox(),
-        errorBuilder: (context) => Text('Error'),
-      ),
-    ));
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder(
+          connectivityService: service,
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
+              Text('$connectivity'),
+          child: SizedBox(),
+        ),
+      ));
 
-    service.addError();
-    await tester.pump(kOfflineDebounceDuration);
-    expect(find.text("Error"), findsOneWidget);
+      service.addError();
+      await tester.pump(kOfflineDebounceDuration);
+      expect(tester.takeException(), isInstanceOf<OfflineBuilderError>());
+    });
+
+    testWidgets('Test w/ errorBuilder', (WidgetTester tester) async {
+      final service = TestConnectivityService(ConnectivityResult.none);
+
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder(
+          connectivityService: service,
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
+              Text('$connectivity'),
+          child: SizedBox(),
+          errorBuilder: (context) => Text('Error'),
+        ),
+      ));
+
+      service.addError();
+      await tester.pump(kOfflineDebounceDuration);
+      expect(find.text("Error"), findsOneWidget);
+    });
   });
 }
 
