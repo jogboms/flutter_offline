@@ -2,13 +2,13 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
 
-Handle offline/online connectivity in Flutter like a Boss. Ample support for both iOS and Android platforms.
+A tidy utility to handle offline/online connectivity like a Boss. It provides support for both iOS and Android platforms (offcourse).
 
 ## 🎖 Installing
 
 ```yaml
 dependencies:
-  flutter_offline: "^0.1.0"
+  flutter_offline: "^0.2.0"
 ```
 
 ### ⚡️ Import
@@ -23,38 +23,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
-class OfflineDelegate extends OfflineBuilderDelegate {
-  @override
-  Widget builder(BuildContext context, bool state) {
-    return new Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned(
-          height: 24.0,
-          left: 0.0,
-          right: 0.0,
-          child: Container(
-            color: state ? Color(0xFF00EE44) : Color(0xFFEE4400),
-            child: Center(
-              child: Text("${state ? 'ONLINE' : 'OFFLINE'}"),
-            ),
-          ),
-        ),
-        Center(
-          child: new Text(
-            'Yay!',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class DemoPage extends StatelessWidget {
-  const DemoPage({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -62,7 +31,45 @@ class DemoPage extends StatelessWidget {
         title: new Text("Offline Demo"),
       ),
       body: OfflineBuilder(
-        delegate: new OfflineDelegate(),
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return new Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned(
+                height: 24.0,
+                left: 0.0,
+                right: 0.0,
+                child: Container(
+                  color: connected ? Color(0xFF00EE44) : Color(0xFFEE4400),
+                  child: Center(
+                    child: Text("${connected ? 'ONLINE' : 'OFFLINE'}"),
+                  ),
+                ),
+              ),
+              Center(
+                child: new Text(
+                  'Yay!',
+                ),
+              ),
+            ],
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text(
+              'There are no bottons to push :)',
+            ),
+            new Text(
+              'Just turn off your internet.',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -76,13 +83,13 @@ For more info, please, refer to the `main.dart` in the example.
 <table>
   <tr>
     <td align="center">
-      <img src="./screenshots/demo_1.gif" width="200px">
+      <img src="./screenshots/demo_1.gif" width="250px">
     </td>
     <td align="center">
-      <img src="./screenshots/demo_2.gif" width="200px">
+      <img src="./screenshots/demo_2.gif" width="250px">
     </td>
     <td align="center">
-      <img src="./screenshots/demo_3.gif" width="200px">
+      <img src="./screenshots/demo_3.gif" width="250px">
     </td>
   </tr>
 </table>
@@ -99,6 +106,10 @@ For help getting started with Flutter, view our online
 [documentation](https://flutter.io/).
 
 For help on editing plugin code, view the [documentation](https://flutter.io/platform-plugins/#edit-code).
+
+### 🤓 Mentions
+
+Simon Lightfoot ([@slightfoot](https://github.com/slightfoot)) is just awesome 👍.
 
 ## ⭐️ License
 
