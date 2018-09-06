@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_offline/flutter_offline.dart';
 
 class DemoPage extends StatelessWidget {
   const DemoPage({
     Key key,
-    @required this.delegate,
+    @required this.child,
   }) : super(key: key);
 
-  final OfflineBuilderDelegate delegate;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +14,7 @@ class DemoPage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text("Offline Demo"),
       ),
-      body: OfflineBuilder(
-        delegate: delegate,
-      ),
+      body: child,
     );
   }
 }

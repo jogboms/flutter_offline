@@ -1,23 +1,11 @@
-import 'package:example/delegates/demo_1.dart';
-import 'package:example/delegates/demo_2.dart';
-import 'package:example/delegates/demo_3.dart';
-import 'package:example/demo_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_offline/flutter_offline.dart';
+
+import './demo_page.dart';
+import './widgets/demo_1.dart';
+import './widgets/demo_2.dart';
+import './widgets/demo_3.dart';
 
 void main() => runApp(new MyApp());
-
-void navigate(BuildContext context, OfflineBuilderDelegate delegate) {
-  Navigator.of(context).push<void>(
-    MaterialPageRoute<void>(
-      builder: (BuildContext context) {
-        return new DemoPage(
-          delegate: delegate,
-        );
-      },
-    ),
-  );
-}
 
 class MyApp extends StatelessWidget {
   @override
@@ -33,24 +21,32 @@ class MyApp extends StatelessWidget {
               RaisedButton(
                 child: Text("Demo 1"),
                 onPressed: () {
-                  navigate(context, Demo1OfflineDelegate());
+                  navigate(context, Demo1());
                 },
               ),
               RaisedButton(
                 child: Text("Demo 2"),
                 onPressed: () {
-                  navigate(context, Demo2OfflineDelegate());
+                  navigate(context, Demo2());
                 },
               ),
               RaisedButton(
                 child: Text("Demo 3"),
                 onPressed: () {
-                  navigate(context, Demo3OfflineDelegate());
+                  navigate(context, Demo3());
                 },
               ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  void navigate(BuildContext context, Widget widget) {
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => DemoPage(child: widget),
       ),
     );
   }

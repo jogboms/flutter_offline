@@ -1,6 +1,6 @@
 name: flutter_offline
-description: Handle offline/online connectivity in Flutter like a Boss.
-version: 0.1.0
+description: A tidy utility to handle offline/online connectivity like a Boss.
+version: 0.2.0
 author: Jeremiah Ogbomo <jeremiahogbomo@gmail.com>
 homepage: https://github.com/jogboms/flutter_offline
 
