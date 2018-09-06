@@ -86,10 +86,22 @@ class OfflineBuilderState extends State<OfflineBuilder> {
         if (!snapshot.hasData && !snapshot.hasError) {
           return SizedBox();
         } else if (snapshot.hasError) {
-          return widget.errorBuilder(context) ?? ErrorWidget(snapshot.error);
+          if (widget.errorBuilder != null) {
+            return widget.errorBuilder(context);
+          }
+          throw new OfflineBuilderError(snapshot.error);
         }
         return widget.connectivityBuilder(context, snapshot.data, child);
       },
     );
   }
+}
+
+class OfflineBuilderError extends Error {
+  final Object error;
+
+  OfflineBuilderError(this.error);
+
+  @override
+  String toString() => error.toString();
 }
