@@ -1,6 +1,6 @@
 # ✈️ Flutter Offline
 
-[![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
+[![Build Status - Travis](https://travis-ci.org/jogboms/flutter_offline.svg?branch=master)](https://travis-ci.org/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
 
 A tidy utility to handle offline/online connectivity like a Boss. It provides support for both iOS and Android platforms (offcourse).
 
