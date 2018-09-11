@@ -244,9 +244,10 @@ void main() {
 class TestConnectivityService extends ConnectivityService {
   StreamController<ConnectivityResult> _controller;
   ConnectivityResult _result = ConnectivityResult.none;
+  final ConnectivityResult initialConnection;
 
-  TestConnectivityService([ConnectivityResult result]) {
-    _result = result;
+  TestConnectivityService([this.initialConnection]) {
+    _result = initialConnection;
     _controller = StreamController.broadcast<ConnectivityResult>(
       onListen: () => _controller.add(_result),
     );
@@ -263,4 +264,9 @@ class TestConnectivityService extends ConnectivityService {
 
   @override
   Stream<ConnectivityResult> get onConnectivityChanged => _controller.stream;
+
+  @override
+  Future<ConnectivityResult> checkConnectivity() {
+    return Future.delayed(Duration.zero, () => initialConnection);
+  }
 }
