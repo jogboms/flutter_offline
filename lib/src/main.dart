@@ -13,18 +13,21 @@ abstract class ConnectivityService {
 }
 
 class OfflineBuilder extends StatefulWidget {
-  const OfflineBuilder({
+  OfflineBuilder({
     Key key,
     @required this.connectivityBuilder,
     this.connectivityService,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
-    this.errorBuilder,
     this.child,
-  })  : assert(builder == null || child == null,
-            'builder and child, cannot both be null'),
-        // TODO
-        // assert(builder != null && child != null, 'You can only specify builder or child, not both'),
+    this.errorBuilder,
+  })  : assert(
+            connectivityBuilder != null, 'connectivityBuilder cannot be null'),
+        assert(debounceDuration != null, 'debounceDuration cannot be null'),
+        assert(
+            !(builder is WidgetBuilder && child is Widget) &&
+                !(builder == null && child == null),
+            'You should specify either a builder or a child'),
         super(key: key);
 
   /// Override connectivity service used for testing
@@ -33,9 +36,16 @@ class OfflineBuilder extends StatefulWidget {
   /// Debounce duration from epileptic network situations
   final Duration debounceDuration;
 
+  /// Used for building the Offline and/or Online UI
   final ConnectivityBuilder connectivityBuilder;
+
+  /// Used for building the child widget
   final WidgetBuilder builder;
+
+  /// The widget below this widget in the tree.
   final Widget child;
+
+  /// Used for building the error widget incase of any platform errors
   final WidgetBuilder errorBuilder;
 
   @override
