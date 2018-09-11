@@ -6,29 +6,74 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Test builder runs builder param', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: OfflineBuilder(
-        connectivityService: TestConnectivityService(ConnectivityResult.none),
-        connectivityBuilder: (_, __, Widget child) => child,
-        builder: (BuildContext context) => Text('builder_result'),
-      ),
-    ));
-    await tester.pump(kOfflineDebounceDuration);
-    expect(find.text('builder_result'), findsOneWidget);
+  group("Test UI Widget", () {
+    testWidgets('Test w/ builder param', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: (_, __, Widget child) => child,
+          builder: (BuildContext context) => Text('builder_result'),
+        ),
+      ));
+      await tester.pump(kOfflineDebounceDuration);
+      expect(find.text('builder_result'), findsOneWidget);
+    });
+
+    testWidgets('Test w/ child param', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: (_, __, Widget child) => child,
+          child: Text('child_result'),
+        ),
+      ));
+      await tester.pump(kOfflineDebounceDuration);
+      expect(find.text('child_result'), findsOneWidget);
+    });
   });
 
-  testWidgets('Test builder passes back child param',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: OfflineBuilder(
-        connectivityService: TestConnectivityService(ConnectivityResult.none),
-        connectivityBuilder: (_, __, Widget child) => child,
-        child: Text('child_result'),
-      ),
-    ));
-    await tester.pump(kOfflineDebounceDuration);
-    expect(find.text('child_result'), findsOneWidget);
+  group("Test Assertions", () {
+    testWidgets('Test no debounceDuration param', (WidgetTester tester) async {
+      expect(() {
+        OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: (_, __, Widget child) => child,
+          debounceDuration: null,
+          builder: (BuildContext context) => Text('builder_result'),
+        );
+      }, throwsAssertionError);
+    });
+
+    testWidgets('Test no connectivityBuilder param',
+        (WidgetTester tester) async {
+      expect(() {
+        OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: null,
+          child: Text('child_result'),
+        );
+      }, throwsAssertionError);
+    });
+
+    testWidgets('Test builder & child param', (WidgetTester tester) async {
+      expect(() {
+        OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: (_, __, Widget child) => child,
+          builder: (BuildContext context) => Text('builder_result'),
+          child: Text('child_result'),
+        );
+      }, throwsAssertionError);
+    });
+
+    testWidgets('Test no builder & child param', (WidgetTester tester) async {
+      expect(() {
+        OfflineBuilder(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          connectivityBuilder: (_, __, Widget child) => child,
+        );
+      }, throwsAssertionError);
+    });
   });
 
   group("Test Status", () {
