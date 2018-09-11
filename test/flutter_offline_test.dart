@@ -212,9 +212,13 @@ void main() {
           connectivityService: service,
           connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
               Text('$connectivity'),
+          debounceDuration: Duration.zero,
           child: SizedBox(),
         ),
       ));
+
+      await tester.pump(Duration.zero);
+      expect(find.text('ConnectivityResult.none'), findsOneWidget);
 
       service.addError();
       await tester.pump(kOfflineDebounceDuration);
@@ -222,7 +226,7 @@ void main() {
     });
 
     testWidgets('Test w/ errorBuilder', (WidgetTester tester) async {
-      final service = TestConnectivityService(ConnectivityResult.none);
+      final service = TestConnectivityService(ConnectivityResult.wifi);
 
       await tester.pumpWidget(MaterialApp(
         home: OfflineBuilder(
@@ -230,9 +234,13 @@ void main() {
           connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
               Text('$connectivity'),
           child: SizedBox(),
+          debounceDuration: Duration.zero,
           errorBuilder: (context) => Text('Error'),
         ),
       ));
+
+      await tester.pump(Duration.zero);
+      expect(find.text('ConnectivityResult.wifi'), findsOneWidget);
 
       service.addError();
       await tester.pump(kOfflineDebounceDuration);
