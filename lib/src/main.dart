@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_offline/src/utils.dart';
 
 const kOfflineDebounceDuration = const Duration(seconds: 3);
 
@@ -10,6 +11,7 @@ typedef Widget ConnectivityBuilder(
 
 abstract class ConnectivityService {
   Stream<ConnectivityResult> get onConnectivityChanged;
+  Future<ConnectivityResult> checkConnectivity();
 }
 
 class OfflineBuilder extends StatefulWidget {
@@ -54,34 +56,28 @@ class OfflineBuilder extends StatefulWidget {
 
 class OfflineBuilderState extends State<OfflineBuilder> {
   Stream<ConnectivityResult> _connectivityStream;
-  bool _seenFirstData = false;
-  Timer _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     Stream<ConnectivityResult> stream;
+    Future<ConnectivityResult> future;
+    final transformers = StreamTransformers();
     if (widget.connectivityService != null) {
       stream = widget.connectivityService.onConnectivityChanged;
+      future = widget.connectivityService.checkConnectivity();
     } else {
-      stream = Connectivity().onConnectivityChanged;
+      final connectivity = Connectivity();
+      stream = connectivity.onConnectivityChanged;
+      future = connectivity.checkConnectivity();
     }
-    _connectivityStream = stream.distinct().transform(StreamTransformer
-            .fromHandlers<ConnectivityResult, ConnectivityResult>(
-          handleData:
-              (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
-            if (_seenFirstData) {
-              _debounceTimer?.cancel();
-              _debounceTimer =
-                  Timer(widget.debounceDuration, () => sink.add(data));
-            } else {
-              sink.add(data);
-              _seenFirstData = true;
-            }
-          },
-          handleDone: (EventSink<ConnectivityResult> sink) =>
-              _debounceTimer?.cancel(),
-        ));
+
+    _connectivityStream = Stream.fromFuture(future)
+        .asyncExpand(
+          (ConnectivityResult data) =>
+              stream.transform(transformers.startsWith(data)),
+        )
+        .transform(transformers.debounce(widget.debounceDuration));
   }
 
   @override
