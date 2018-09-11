@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_offline/src/utils.dart';
 
 const kOfflineDebounceDuration = const Duration(seconds: 3);
 
@@ -10,21 +11,25 @@ typedef Widget ConnectivityBuilder(
 
 abstract class ConnectivityService {
   Stream<ConnectivityResult> get onConnectivityChanged;
+  Future<ConnectivityResult> checkConnectivity();
 }
 
 class OfflineBuilder extends StatefulWidget {
-  const OfflineBuilder({
+  OfflineBuilder({
     Key key,
     @required this.connectivityBuilder,
     this.connectivityService,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
-    this.errorBuilder,
     this.child,
-  })  : assert(builder == null || child == null,
-            'builder and child, cannot both be null'),
-        // TODO
-        // assert(builder != null && child != null, 'You can only specify builder or child, not both'),
+    this.errorBuilder,
+  })  : assert(
+            connectivityBuilder != null, 'connectivityBuilder cannot be null'),
+        assert(debounceDuration != null, 'debounceDuration cannot be null'),
+        assert(
+            !(builder is WidgetBuilder && child is Widget) &&
+                !(builder == null && child == null),
+            'You should specify either a builder or a child'),
         super(key: key);
 
   /// Override connectivity service used for testing
@@ -33,9 +38,16 @@ class OfflineBuilder extends StatefulWidget {
   /// Debounce duration from epileptic network situations
   final Duration debounceDuration;
 
+  /// Used for building the Offline and/or Online UI
   final ConnectivityBuilder connectivityBuilder;
+
+  /// Used for building the child widget
   final WidgetBuilder builder;
+
+  /// The widget below this widget in the tree.
   final Widget child;
+
+  /// Used for building the error widget incase of any platform errors
   final WidgetBuilder errorBuilder;
 
   @override
@@ -44,34 +56,28 @@ class OfflineBuilder extends StatefulWidget {
 
 class OfflineBuilderState extends State<OfflineBuilder> {
   Stream<ConnectivityResult> _connectivityStream;
-  bool _seenFirstData = false;
-  Timer _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     Stream<ConnectivityResult> stream;
+    Future<ConnectivityResult> future;
+    final transformers = StreamTransformers();
     if (widget.connectivityService != null) {
       stream = widget.connectivityService.onConnectivityChanged;
+      future = widget.connectivityService.checkConnectivity();
     } else {
-      stream = Connectivity().onConnectivityChanged;
+      final connectivity = Connectivity();
+      stream = connectivity.onConnectivityChanged;
+      future = connectivity.checkConnectivity();
     }
-    _connectivityStream = stream.distinct().transform(StreamTransformer
-            .fromHandlers<ConnectivityResult, ConnectivityResult>(
-          handleData:
-              (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
-            if (_seenFirstData) {
-              _debounceTimer?.cancel();
-              _debounceTimer =
-                  Timer(widget.debounceDuration, () => sink.add(data));
-            } else {
-              sink.add(data);
-              _seenFirstData = true;
-            }
-          },
-          handleDone: (EventSink<ConnectivityResult> sink) =>
-              _debounceTimer?.cancel(),
-        ));
+
+    _connectivityStream = Stream.fromFuture(future)
+        .asyncExpand(
+          (ConnectivityResult data) =>
+              stream.transform(transformers.startsWith(data)),
+        )
+        .transform(transformers.debounce(widget.debounceDuration));
   }
 
   @override
