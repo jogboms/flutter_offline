@@ -104,9 +104,9 @@ class OfflineBuilderState extends State<OfflineBuilder> {
 }
 
 class OfflineBuilderError extends Error {
-  final Object error;
-
   OfflineBuilderError(this.error);
+
+  final Object error;
 
   @override
   String toString() => error.toString();

@@ -250,16 +250,16 @@ void main() {
 }
 
 class TestConnectivityService extends ConnectivityService {
-  StreamController<ConnectivityResult> _controller;
-  ConnectivityResult _result = ConnectivityResult.none;
-  final ConnectivityResult initialConnection;
-
   TestConnectivityService([this.initialConnection]) {
     _result = initialConnection;
-    _controller = StreamController.broadcast<ConnectivityResult>(
+    _controller = StreamController<ConnectivityResult>.broadcast(
       onListen: () => _controller.add(_result),
     );
   }
+
+  StreamController<ConnectivityResult> _controller;
+  ConnectivityResult _result = ConnectivityResult.none;
+  final ConnectivityResult initialConnection;
 
   set result(ConnectivityResult result) {
     _result = result;
