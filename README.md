@@ -8,7 +8,7 @@ A tidy utility to handle offline/online connectivity like a Boss. It provides su
 
 ```yaml
 dependencies:
-  flutter_offline: "^0.2.2"
+  flutter_offline: "^0.2.3"
 ```
 
 ### ⚡️ Import
@@ -83,13 +83,13 @@ For more info, please, refer to the `main.dart` in the example.
 <table>
   <tr>
     <td align="center">
-      <img src="./screenshots/demo_1.gif" width="250px">
+      <img src="https://raw.githubusercontent.com/jogboms/flutter_offline/master/screenshots/demo_1.gif" width="250px">
     </td>
     <td align="center">
-      <img src="./screenshots/demo_2.gif" width="250px">
+      <img src="https://raw.githubusercontent.com/jogboms/flutter_offline/master/screenshots/demo_2.gif" width="250px">
     </td>
     <td align="center">
-      <img src="./screenshots/demo_3.gif" width="250px">
+      <img src="https://raw.githubusercontent.com/jogboms/flutter_offline/master/screenshots/demo_3.gif" width="250px">
     </td>
   </tr>
 </table>
