@@ -1,19 +1,23 @@
+language: bash
 os:
-  - linux
+  - osx
 sudo: false
-addons:
-  apt:
-    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-    sources:
-      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-    packages:
-      - libstdc++6
-      - fonts-droid
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta
-  - ./flutter/bin/flutter doctor
+  - cd ..
+  - git clone https://github.com/flutter/flutter.git -b master
+  - export PATH=$PATH:$PWD/flutter/bin
+  - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
+  - flutter doctor
+  - cd -
 script:
-  - ./flutter/bin/flutter test
+  # abort on error
+  - set -e
+  - flutter packages get
+  - flutter format --set-exit-if-changed lib example
+  - flutter analyze lib example
+  - flutter test --no-pub --coverage
+  # export coverage
+  - bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
     - $HOME/.pub-cache
