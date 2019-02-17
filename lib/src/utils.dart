@@ -28,36 +28,35 @@ class StreamTransformers {
     );
   }
 
-  // TODO: should test this
   StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
     ConnectivityResult data,
   ) {
-    return new StreamTransformer<ConnectivityResult, ConnectivityResult>(
-        (Stream<ConnectivityResult> input, bool cancelOnError) {
-      StreamController<ConnectivityResult> controller;
-      StreamSubscription<ConnectivityResult> subscription;
+    return StreamTransformer<ConnectivityResult, ConnectivityResult>(
+      (
+        Stream<ConnectivityResult> input,
+        bool cancelOnError,
+      ) {
+        StreamController<ConnectivityResult> controller;
+        StreamSubscription<ConnectivityResult> subscription;
 
-      controller = new StreamController<ConnectivityResult>(
-        sync: true,
-        onListen: () {
-          try {
-            controller.add(data);
-          } catch (e, s) {
-            controller.addError(e, s);
-          }
+        controller = StreamController<ConnectivityResult>(
+          sync: true,
+          onListen: () => controller?.add(data),
+          onPause: ([Future<dynamic> resumeSignal]) =>
+              subscription.pause(resumeSignal),
+          onResume: () => subscription.resume(),
+          onCancel: () => subscription.cancel(),
+        );
 
-          subscription = input.listen(controller.add,
-              onError: controller.addError,
-              onDone: controller.close,
-              cancelOnError: cancelOnError);
-        },
-        onPause: ([Future<dynamic> resumeSignal]) =>
-            subscription.pause(resumeSignal),
-        onResume: () => subscription.resume(),
-        onCancel: () => subscription.cancel(),
-      );
+        subscription = input.listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: controller.close,
+          cancelOnError: cancelOnError,
+        );
 
-      return controller.stream.listen(null);
-    });
+        return controller.stream.listen(null);
+      },
+    );
   }
 }
