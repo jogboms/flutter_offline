@@ -9,8 +9,6 @@ Future<void> waitForTimer(int milliseconds) =>
       (_) => Future<void>.delayed(Duration(milliseconds: milliseconds + 1)),
     );
 
-final transformers = StreamTransformers();
-
 void main() {
   final stream = () => StreamController<ConnectivityResult>.broadcast();
 
@@ -41,7 +39,7 @@ void main() {
 
     group('debounce', () {
       setUp(() async {
-        setUpStreams(transformers.debounce(const Duration(milliseconds: 5)));
+        setUpStreams(debounce(const Duration(milliseconds: 5)));
       });
 
       test('cancels values', () async {

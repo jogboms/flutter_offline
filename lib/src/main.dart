@@ -77,18 +77,17 @@ class OfflineBuilderState extends State<OfflineBuilder> {
   @override
   void initState() {
     super.initState();
-    final transformers = StreamTransformers();
 
     _connectivityStream = Stream.fromFuture(
       widget.connectivityService.checkConnectivity(),
     ).asyncExpand(
       (ConnectivityResult data) {
         return widget.connectivityService.onConnectivityChanged.transform(
-          transformers.startsWith(data),
+          startsWith(data),
         );
       },
     ).transform(
-      transformers.debounce(widget.debounceDuration),
+      debounce(widget.debounceDuration),
     );
   }
 

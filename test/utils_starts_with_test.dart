@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter_offline/src/utils.dart';
+import 'package:flutter_offline/src/utils.dart' as transformers;
 import 'package:flutter_test/flutter_test.dart';
-
-final transformers = StreamTransformers();
 
 void main() {
   final stream = () => StreamController<ConnectivityResult>();
