@@ -83,7 +83,6 @@ void main() {
       expect(emittedValues, [ConnectivityResult.none]);
     });
 
-    // TODO
     // test('closes with values', () async {
     //   expect(isDone, false);
     //   await values.close();
