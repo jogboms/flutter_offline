@@ -9,16 +9,31 @@ const kOfflineDebounceDuration = const Duration(seconds: 3);
 typedef Widget ConnectivityBuilder(
     BuildContext context, ConnectivityResult connectivity, Widget child);
 
-abstract class ConnectivityService {
-  Stream<ConnectivityResult> get onConnectivityChanged;
-  Future<ConnectivityResult> checkConnectivity();
-}
-
 class OfflineBuilder extends StatefulWidget {
-  OfflineBuilder({
+  factory OfflineBuilder({
+    Key key,
+    @required ConnectivityBuilder connectivityBuilder,
+    Duration debounceDuration = kOfflineDebounceDuration,
+    WidgetBuilder builder,
+    Widget child,
+    WidgetBuilder errorBuilder,
+  }) {
+    return OfflineBuilder.initialize(
+      key: key,
+      connectivityBuilder: connectivityBuilder,
+      connectivityService: Connectivity(),
+      debounceDuration: debounceDuration,
+      builder: builder,
+      child: child,
+      errorBuilder: errorBuilder,
+    );
+  }
+
+  @visibleForTesting
+  OfflineBuilder.initialize({
     Key key,
     @required this.connectivityBuilder,
-    this.connectivityService,
+    @required this.connectivityService,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
     this.child,
@@ -27,13 +42,15 @@ class OfflineBuilder extends StatefulWidget {
             connectivityBuilder != null, 'connectivityBuilder cannot be null'),
         assert(debounceDuration != null, 'debounceDuration cannot be null'),
         assert(
+            connectivityService != null, 'connectivityService cannot be null'),
+        assert(
             !(builder is WidgetBuilder && child is Widget) &&
                 !(builder == null && child == null),
             'You should specify either a builder or a child'),
         super(key: key);
 
   /// Override connectivity service used for testing
-  final ConnectivityService connectivityService;
+  final Connectivity connectivityService;
 
   /// Debounce duration from epileptic network situations
   final Duration debounceDuration;
@@ -60,24 +77,19 @@ class OfflineBuilderState extends State<OfflineBuilder> {
   @override
   void initState() {
     super.initState();
-    Stream<ConnectivityResult> stream;
-    Future<ConnectivityResult> future;
     final transformers = StreamTransformers();
-    if (widget.connectivityService != null) {
-      stream = widget.connectivityService.onConnectivityChanged;
-      future = widget.connectivityService.checkConnectivity();
-    } else {
-      final connectivity = Connectivity();
-      stream = connectivity.onConnectivityChanged;
-      future = connectivity.checkConnectivity();
-    }
 
-    _connectivityStream = Stream.fromFuture(future)
-        .asyncExpand(
-          (ConnectivityResult data) =>
-              stream.transform(transformers.startsWith(data)),
-        )
-        .transform(transformers.debounce(widget.debounceDuration));
+    _connectivityStream = Stream.fromFuture(
+      widget.connectivityService.checkConnectivity(),
+    ).asyncExpand(
+      (ConnectivityResult data) {
+        return widget.connectivityService.onConnectivityChanged.transform(
+          transformers.startsWith(data),
+        );
+      },
+    ).transform(
+      transformers.debounce(widget.debounceDuration),
+    );
   }
 
   @override
