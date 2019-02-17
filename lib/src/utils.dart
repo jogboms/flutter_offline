@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 
 class StreamTransformers {
-  bool _seenFirstData = false;
-  Timer _debounceTimer;
-
-  // TODO: should test this
   StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
     Duration debounceDuration,
   ) {
+    bool _seenFirstData = false;
+    Timer _debounceTimer;
+
     return StreamTransformer<ConnectivityResult,
         ConnectivityResult>.fromHandlers(
       handleData:
@@ -22,8 +21,10 @@ class StreamTransformers {
           _seenFirstData = true;
         }
       },
-      handleDone: (EventSink<ConnectivityResult> sink) =>
-          _debounceTimer?.cancel(),
+      handleDone: (EventSink<ConnectivityResult> sink) {
+        _debounceTimer?.cancel();
+        sink.close();
+      },
     );
   }
 
@@ -37,23 +38,24 @@ class StreamTransformers {
       StreamSubscription<ConnectivityResult> subscription;
 
       controller = new StreamController<ConnectivityResult>(
-          sync: true,
-          onListen: () {
-            try {
-              controller.add(data);
-            } catch (e, s) {
-              controller.addError(e, s);
-            }
+        sync: true,
+        onListen: () {
+          try {
+            controller.add(data);
+          } catch (e, s) {
+            controller.addError(e, s);
+          }
 
-            subscription = input.listen(controller.add,
-                onError: controller.addError,
-                onDone: controller.close,
-                cancelOnError: cancelOnError);
-          },
-          onPause: ([Future<dynamic> resumeSignal]) =>
-              subscription.pause(resumeSignal),
-          onResume: () => subscription.resume(),
-          onCancel: () => subscription.cancel());
+          subscription = input.listen(controller.add,
+              onError: controller.addError,
+              onDone: controller.close,
+              cancelOnError: cancelOnError);
+        },
+        onPause: ([Future<dynamic> resumeSignal]) =>
+            subscription.pause(resumeSignal),
+        onResume: () => subscription.resume(),
+        onCancel: () => subscription.cancel(),
+      );
 
       return controller.stream.listen(null);
     });
