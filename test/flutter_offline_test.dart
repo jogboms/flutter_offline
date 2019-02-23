@@ -287,9 +287,7 @@ class TestConnectivityService implements Connectivity {
     controller.add(result);
   }
 
-  void addError() {
-    controller.addError('Error');
-  }
+  void addError() => controller.addError('Error');
 
   @override
   Stream<ConnectivityResult> get onConnectivityChanged => controller.stream;
@@ -298,4 +296,10 @@ class TestConnectivityService implements Connectivity {
   Future<ConnectivityResult> checkConnectivity() {
     return Future.delayed(Duration.zero, () => initialConnection);
   }
+
+  @override
+  Future<String> getWifiIP() async => '127.0.0.1';
+
+  @override
+  Future<String> getWifiName() async => 'Localhost';
 }

@@ -11,6 +11,10 @@ dependencies:
   flutter_offline: "^0.2.4"
 ```
 
+#### Note for AndroidX Apps
+
+Make sure to point to `0.2.4+1`
+
 ### ⚡️ Import
 
 ```dart
