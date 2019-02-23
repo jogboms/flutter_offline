@@ -101,12 +101,12 @@ class OfflineBuilderState extends State<OfflineBuilder> {
       ) {
         final child = widget.child ?? widget.builder(context);
         if (!snapshot.hasData && !snapshot.hasError) {
-          return SizedBox();
+          return const SizedBox();
         } else if (snapshot.hasError) {
           if (widget.errorBuilder != null) {
             return widget.errorBuilder(context);
           }
-          throw new OfflineBuilderError(snapshot.error);
+          throw OfflineBuilderError(snapshot.error);
         }
         return widget.connectivityBuilder(context, snapshot.data, child);
       },
