@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/src/utils.dart';
 
 const kOfflineDebounceDuration = const Duration(seconds: 3);
-const kAdressInternet = 'google.com';
+const kHostToCheck = 'google.com';
 
 typedef Widget ConnectivityBuilder(
     BuildContext context, ConnectivityResult connectivity, Widget child);
@@ -15,7 +15,8 @@ class OfflineBuilder extends StatefulWidget {
     Key key,
     @required ConnectivityBuilder connectivityBuilder,
     Duration debounceDuration = kOfflineDebounceDuration,
-    String address = kAdressInternet,
+    String hostToCheck = kHostToCheck,
+    bool checkHost = false,
     WidgetBuilder builder,
     Widget child,
     WidgetBuilder errorBuilder,
@@ -25,7 +26,8 @@ class OfflineBuilder extends StatefulWidget {
       connectivityBuilder: connectivityBuilder,
       connectivityService: Connectivity(),
       debounceDuration: debounceDuration,
-      address : address,
+      hostToCheck : hostToCheck,
+      checkHost : checkHost,
       builder: builder,
       child: child,
       errorBuilder: errorBuilder,
@@ -38,14 +40,16 @@ class OfflineBuilder extends StatefulWidget {
     @required this.connectivityBuilder,
     @required this.connectivityService,
     this.debounceDuration = kOfflineDebounceDuration,
-    this.address =kAdressInternet,
+    this.hostToCheck = kHostToCheck,
+    this.checkHost = false,
     this.builder,
     this.child,
     this.errorBuilder,
   })  : assert(
             connectivityBuilder != null, 'connectivityBuilder cannot be null'),
         assert(debounceDuration != null, 'debounceDuration cannot be null'),
-        assert(address != null, 'address cannot be null'),
+        assert(hostToCheck != null, 'hostToCheck cannot be null'),
+        assert(checkHost != null, 'checkHost cannot be true or false'),
         assert(
             connectivityService != null, 'connectivityService cannot be null'),
         assert(
@@ -60,8 +64,11 @@ class OfflineBuilder extends StatefulWidget {
   /// Debounce duration from epileptic network situations
   final Duration debounceDuration;
 
-  /// Address to test internet connection 
-  final String address;
+  /// Hostname to test internet connection 
+  final String hostToCheck;
+
+  /// hostToCheck to test internet connection 
+  final bool checkHost;
 
   /// Used for building the Offline and/or Online UI
   final ConnectivityBuilder connectivityBuilder;
@@ -94,9 +101,11 @@ class OfflineBuilderState extends State<OfflineBuilder> {
           startsWith(data),
         );
       },
-    ).transform(
-      testInternet(widget.address),
-    ).transform(
+    );
+    _connectivityStream = widget.checkHost ? _connectivityStream.transform(
+       checkIfHostIsAvailble(widget.hostToCheck),
+    ) : _connectivityStream;
+     _connectivityStream = _connectivityStream.transform(
       debounce(widget.debounceDuration),
     );
   }
