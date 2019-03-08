@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -53,5 +54,24 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
 
       return controller.stream.listen(null);
     },
+  );
+}
+
+StreamTransformer<ConnectivityResult, ConnectivityResult> checkIfHostIsAvailble(String host) {
+  return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
+    handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) async {
+      try {
+        final result = await InternetAddress.lookup(host);
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          sink.add(data);
+          return;
+        }
+
+        throw SocketException("");
+      } on SocketException catch (_) {
+        sink.add(ConnectivityResult.none);
+      }
+    },
+    handleDone: (EventSink<ConnectivityResult> sink) => sink.close(),
   );
 }
