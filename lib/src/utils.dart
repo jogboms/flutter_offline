@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -53,6 +54,43 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
       );
 
       return controller.stream.listen(null);
+    },
+  );
+}
+
+StreamTransformer<ConnectivityResult, ConnectivityResult> testInternet(
+  String address,
+) {
+  bool _seenFirstData = false;
+  Timer _timer;
+
+  return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
+    handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
+      if (_seenFirstData) {
+        _timer?.cancel();
+        _timer = Timer(Duration.zero, ()async {
+          try {
+            final result = await InternetAddress.lookup(address);
+            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+              print('## connected');
+              sink.add(data);
+            }else{
+              print('## not connected');
+              sink.add(ConnectivityResult.none);
+            }
+          } on SocketException catch (_) {
+            print('## not connected');
+            sink.add(ConnectivityResult.none);
+          }
+        });
+      } else {
+        sink.add(data);
+        _seenFirstData = true;
+      }
+    },
+    handleDone: (EventSink<ConnectivityResult> sink) {
+      _timer?.cancel();
+      sink.close();
     },
   );
 }
