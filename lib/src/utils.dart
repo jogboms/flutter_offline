@@ -58,8 +58,8 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
   );
 }
 
-StreamTransformer<ConnectivityResult, ConnectivityResult> testInternet(
-  String address,
+StreamTransformer<ConnectivityResult, ConnectivityResult> checkIfHostIsAvailble(
+  String host,
 ) {
   bool _seenFirstData = false;
   Timer _timer;
@@ -70,16 +70,13 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> testInternet(
         _timer?.cancel();
         _timer = Timer(Duration.zero, ()async {
           try {
-            final result = await InternetAddress.lookup(address);
+            final result = await InternetAddress.lookup(host);
             if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-              print('## connected');
               sink.add(data);
             }else{
-              print('## not connected');
               sink.add(ConnectivityResult.none);
             }
           } on SocketException catch (_) {
-            print('## not connected');
             sink.add(ConnectivityResult.none);
           }
         });
