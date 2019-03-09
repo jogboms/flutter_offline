@@ -13,7 +13,7 @@ dependencies:
 
 #### Note for AndroidX Apps
 
-Make sure to point to `0.2.4+1`
+Make sure to point to `0.2.4+2`
 
 ### ⚡️ Import
 
