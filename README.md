@@ -35,6 +35,8 @@ class DemoPage extends StatelessWidget {
         title: new Text("Offline Demo"),
       ),
       body: OfflineBuilder(
+        checkHost : true, // check if internet is avaiable by a DNS request , the default value is false
+        // hostToCheck : "my.domaine.name", // the default value is google.com 
         connectivityBuilder: (
           BuildContext context,
           ConnectivityResult connectivity,
