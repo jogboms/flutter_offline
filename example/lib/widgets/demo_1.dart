@@ -5,12 +5,8 @@ class Demo1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OfflineBuilder(
-      connectivityBuilder: (
-        BuildContext context,
-        ConnectivityResult connectivity,
-        Widget child,
-      ) {
-        final bool connected = connectivity != ConnectivityResult.none;
+      connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
+        final bool isConnected = connectivity != ConnectivityResult.none;
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -21,26 +17,10 @@ class Demo1 extends StatelessWidget {
               right: 0.0,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 350),
-                color: connected ? Color(0xFF00EE44) : Color(0xFFEE4400),
+                color: isConnected ? Color(0xFF00EE44) : Color(0xFFEE4400),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 350),
-                  child: connected
-                      ? Text('ONLINE')
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('OFFLINE'),
-                            SizedBox(width: 8.0),
-                            SizedBox(
-                              width: 12.0,
-                              height: 12.0,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.0,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
+                  child: isConnected ? Text('ONLINE') : _OfflineWidget(),
                 ),
               ),
             ),
@@ -50,14 +30,30 @@ class Demo1 extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            'There are no bottons to push :)',
-          ),
-          Text(
-            'Just turn off your internet.',
-          ),
+          Text('There are no bottons to push :)'),
+          Text('Just turn off your internet.'),
         ],
       ),
+    );
+  }
+}
+
+class _OfflineWidget extends StatelessWidget {
+  const _OfflineWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text('OFFLINE'),
+        SizedBox(width: 8.0),
+        SizedBox(
+          width: 12.0,
+          height: 12.0,
+          child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+        ),
+      ],
     );
   }
 }
