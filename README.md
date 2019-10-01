@@ -1,4 +1,4 @@
-# ✈️ Flutter Offline
+# ✈️ Flutter Offline  
 
 [![Build Status - Travis](https://travis-ci.org/jogboms/flutter_offline.svg?branch=master)](https://travis-ci.org/jogboms/flutter_offline) [![codecov](https://codecov.io/gh/jogboms/flutter_offline/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
 
