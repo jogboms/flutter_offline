@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  connectivity: ^0.4.2
+  connectivity: ^0.4.5+3
 
 dev_dependencies:
   flutter_test:
