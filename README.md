@@ -8,12 +8,8 @@ A tidy utility to handle offline/online connectivity like a Boss. It provides su
 
 ```yaml
 dependencies:
-  flutter_offline: "^0.2.4"
+  flutter_offline: "^0.3.0"
 ```
-
-#### Note for AndroidX Apps
-
-Make sure to point to `0.2.4+1`
 
 ### ⚡️ Import
 
