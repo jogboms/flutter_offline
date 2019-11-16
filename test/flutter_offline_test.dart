@@ -74,6 +74,18 @@ void main() {
       }, throwsAssertionError);
     });
 
+    testWidgets('Test null Host options', (WidgetTester tester) async {
+      expect(() {
+        OfflineBuilder.initialize(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          hostToCheck: null,
+          checkHost: null,
+          connectivityBuilder: (_, __, Widget child) => child,
+          child: const Text('child_result'),
+        );
+      }, throwsAssertionError);
+    });
+
     testWidgets('Test builder & child param', (WidgetTester tester) async {
       expect(() {
         OfflineBuilder.initialize(
@@ -156,6 +168,65 @@ void main() {
       service.result = ConnectivityResult.wifi;
       await tester.pump(kOfflineDebounceDuration);
       expect(find.text('ConnectivityResult.wifi'), findsOneWidget);
+    });
+  });
+
+  group("Test Check If Host", () {
+    testWidgets('with default host', (WidgetTester tester) async {
+      const debounceDuration = Duration.zero;
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder.initialize(
+          connectivityService:
+              TestConnectivityService(ConnectivityResult.mobile),
+          checkHost: true,
+          debounceDuration: debounceDuration,
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
+              Text('$connectivity'),
+          child: const SizedBox(),
+        ),
+      ));
+
+      await tester.pump(debounceDuration);
+      expect(find.byType(SizedBox), findsOneWidget);
+    });
+
+    testWidgets('with local host', (WidgetTester tester) async {
+      const debounceDuration = Duration.zero;
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder.initialize(
+          connectivityService:
+              TestConnectivityService(ConnectivityResult.mobile),
+          checkHost: true,
+          hostToCheck: "127.0.0.1",
+          debounceDuration: debounceDuration,
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
+              Text('$connectivity'),
+          child: const SizedBox(),
+        ),
+      ));
+
+      await tester.pump(debounceDuration);
+      expect(find.byType(SizedBox), findsOneWidget);
+    });
+
+    testWidgets('with bad host', (WidgetTester tester) async {
+      const debounceDuration = Duration.zero;
+      await tester.pumpWidget(MaterialApp(
+        home: OfflineBuilder.initialize(
+          connectivityService: TestConnectivityService(ConnectivityResult.none),
+          checkHost: true,
+          hostToCheck: "kkk",
+          debounceDuration: debounceDuration,
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) {
+            print(connectivity);
+            return Text('$connectivity');
+          },
+          child: const SizedBox(),
+        ),
+      ));
+
+      await tester.pump(debounceDuration);
+      expect(find.byType(SizedBox), findsOneWidget);
     });
   });
 
@@ -280,9 +351,7 @@ class TestConnectivityService implements Connectivity {
   Stream<ConnectivityResult> get onConnectivityChanged => controller.stream;
 
   @override
-  Future<ConnectivityResult> checkConnectivity() {
-    return Future.delayed(Duration.zero, () => initialConnection);
-  }
+  Future<ConnectivityResult> checkConnectivity() async => initialConnection;
 
   @override
   Future<String> getWifiIP() async => '127.0.0.1';

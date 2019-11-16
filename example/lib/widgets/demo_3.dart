@@ -6,37 +6,25 @@ class Demo3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return OfflineBuilder(
       debounceDuration: Duration.zero,
-      connectivityBuilder: (
-        BuildContext context,
-        ConnectivityResult connectivity,
-        Widget child,
-      ) {
+      connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
         if (connectivity == ConnectivityResult.none) {
           return Container(
             color: Colors.white70,
             child: Center(
-              child: Text(
-                "Oops, \n\nWe experienced a Delayed Offline!",
-                style: TextStyle(color: Colors.black),
-              ),
+              child: Text("Oops, \n\nWe experienced a Delayed Offline!", style: TextStyle(color: Colors.black)),
             ),
           );
         }
+
         return child;
       },
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'There are no bottons to push :)',
-            ),
-            Text(
-              'Just turn off your internet.',
-            ),
-            Text(
-              'This one has a bit of a delay.',
-            ),
+            Text('There are no bottons to push :)'),
+            Text('Just turn off your internet.'),
+            Text('This one has a bit of a delay.'),
           ],
         ),
       ),
