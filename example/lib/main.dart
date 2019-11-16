@@ -5,14 +5,14 @@ import './widgets/demo_1.dart';
 import './widgets/demo_2.dart';
 import './widgets/demo_3.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Offline Demo',
-      theme: new ThemeData.dark(),
+      theme: ThemeData.dark(),
       home: Builder(
         builder: (BuildContext context) {
           return Column(

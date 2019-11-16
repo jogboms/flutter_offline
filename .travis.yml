@@ -13,7 +13,7 @@ script:
   # abort on error
   - set -e
   - flutter packages get
-  - flutter format --set-exit-if-changed lib example
+  - flutter format --set-exit-if-changed -l lib -l 120 example
   - flutter analyze lib example
   - flutter test --no-pub --coverage
   # export coverage
