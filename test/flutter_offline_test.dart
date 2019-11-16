@@ -188,7 +188,7 @@ void main() {
 
     testWidgets('Test for Debounce: 5 seconds', (WidgetTester tester) async {
       final service = TestConnectivityService(ConnectivityResult.none);
-      const debounceDuration = const Duration(seconds: 5);
+      const debounceDuration = Duration(seconds: 5);
       await tester.pumpWidget(MaterialApp(
         home: OfflineBuilder.initialize(
           connectivityService: service,

@@ -10,9 +10,9 @@ class DemoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Offline Demo"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Offline Demo"),
       ),
       body: child,
     );

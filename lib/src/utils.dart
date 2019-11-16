@@ -39,8 +39,7 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
       controller = StreamController<ConnectivityResult>(
         sync: true,
         onListen: () => controller?.add(data),
-        onPause: ([Future<dynamic> resumeSignal]) =>
-            subscription.pause(resumeSignal),
+        onPause: ([Future<dynamic> resumeSignal]) => subscription.pause(resumeSignal),
         onResume: () => subscription.resume(),
         onCancel: () => subscription.cancel(),
       );

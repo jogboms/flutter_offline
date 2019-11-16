@@ -4,15 +4,12 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/src/utils.dart';
 
-const kOfflineDebounceDuration = const Duration(seconds: 3);
-
-typedef Widget ConnectivityBuilder(
-    BuildContext context, ConnectivityResult connectivity, Widget child);
+const kOfflineDebounceDuration = Duration(seconds: 3);
 
 class OfflineBuilder extends StatefulWidget {
   factory OfflineBuilder({
     Key key,
-    @required ConnectivityBuilder connectivityBuilder,
+    @required ValueWidgetBuilder<ConnectivityResult> connectivityBuilder,
     Duration debounceDuration = kOfflineDebounceDuration,
     WidgetBuilder builder,
     Widget child,
@@ -38,14 +35,10 @@ class OfflineBuilder extends StatefulWidget {
     this.builder,
     this.child,
     this.errorBuilder,
-  })  : assert(
-            connectivityBuilder != null, 'connectivityBuilder cannot be null'),
+  })  : assert(connectivityBuilder != null, 'connectivityBuilder cannot be null'),
         assert(debounceDuration != null, 'debounceDuration cannot be null'),
-        assert(
-            connectivityService != null, 'connectivityService cannot be null'),
-        assert(
-            !(builder is WidgetBuilder && child is Widget) &&
-                !(builder == null && child == null),
+        assert(connectivityService != null, 'connectivityService cannot be null'),
+        assert(!(builder is WidgetBuilder && child is Widget) && !(builder == null && child == null),
             'You should specify either a builder or a child'),
         super(key: key);
 
@@ -56,7 +49,7 @@ class OfflineBuilder extends StatefulWidget {
   final Duration debounceDuration;
 
   /// Used for building the Offline and/or Online UI
-  final ConnectivityBuilder connectivityBuilder;
+  final ValueWidgetBuilder<ConnectivityResult> connectivityBuilder;
 
   /// Used for building the child widget
   final WidgetBuilder builder;
@@ -78,37 +71,28 @@ class OfflineBuilderState extends State<OfflineBuilder> {
   void initState() {
     super.initState();
 
-    _connectivityStream = Stream.fromFuture(
-      widget.connectivityService.checkConnectivity(),
-    ).asyncExpand(
-      (ConnectivityResult data) {
-        return widget.connectivityService.onConnectivityChanged.transform(
-          startsWith(data),
-        );
-      },
-    ).transform(
-      debounce(widget.debounceDuration),
-    );
+    _connectivityStream = Stream.fromFuture(widget.connectivityService.checkConnectivity())
+        .asyncExpand((data) => widget.connectivityService.onConnectivityChanged.transform(startsWith(data)))
+        .transform(debounce(widget.debounceDuration));
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ConnectivityResult>(
       stream: _connectivityStream,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<ConnectivityResult> snapshot,
-      ) {
-        final child = widget.child ?? widget.builder(context);
+      builder: (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
-        } else if (snapshot.hasError) {
+        }
+
+        if (snapshot.hasError) {
           if (widget.errorBuilder != null) {
             return widget.errorBuilder(context);
           }
           throw OfflineBuilderError(snapshot.error);
         }
-        return widget.connectivityBuilder(context, snapshot.data, child);
+
+        return widget.connectivityBuilder(context, snapshot.data, widget.child ?? widget.builder(context));
       },
     );
   }

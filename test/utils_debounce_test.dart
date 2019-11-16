@@ -4,8 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Future<void> waitForTimer(int milliseconds) =>
-    Future<void>(() {/* ensure Timer is started*/}).then<void>(
+Future<void> waitForTimer(int milliseconds) => Future<void>(() {/* ensure Timer is started*/}).then<void>(
       (_) => Future<void>.delayed(Duration(milliseconds: milliseconds + 1)),
     );
 
@@ -31,8 +30,7 @@ void main() {
       errors = <ConnectivityResult>[];
       isDone = false;
       transformed = values.stream.transform<void>(transformer);
-      subscription = transformed.listen(emittedValues.add, onError: errors.add,
-          onDone: () {
+      subscription = transformed.listen(emittedValues.add, onError: errors.add, onDone: () {
         isDone = true;
       });
     }

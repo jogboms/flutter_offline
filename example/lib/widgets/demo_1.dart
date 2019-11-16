@@ -36,8 +36,7 @@ class Demo1 extends StatelessWidget {
                               height: 12.0,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2.0,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             ),
                           ],
@@ -51,10 +50,10 @@ class Demo1 extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(
+          Text(
             'There are no bottons to push :)',
           ),
-          new Text(
+          Text(
             'Just turn off your internet.',
           ),
         ],

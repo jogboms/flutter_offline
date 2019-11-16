@@ -69,11 +69,7 @@ void main() {
     test('outputs all values', () async {
       values..add(ConnectivityResult.mobile)..add(ConnectivityResult.wifi);
       await Future(() {});
-      expect(emittedValues, [
-        ConnectivityResult.none,
-        ConnectivityResult.mobile,
-        ConnectivityResult.wifi
-      ]);
+      expect(emittedValues, [ConnectivityResult.none, ConnectivityResult.mobile, ConnectivityResult.wifi]);
     });
 
     test('outputs initial when followed by empty stream', () async {
