@@ -17,6 +17,12 @@ dependencies:
 import 'package:flutter_offline/flutter_offline.dart';
 ```
 
+### ⚡️ Add Permission to Manifest
+
+```dart
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
 ## 🎮 How To Use
 
 ```dart
