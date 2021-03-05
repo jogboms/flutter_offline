@@ -6,7 +6,7 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   Duration debounceDuration,
 ) {
   var _seenFirstData = false;
-  Timer _debounceTimer;
+  Timer? _debounceTimer;
 
   return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
     handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
@@ -33,13 +33,13 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
       Stream<ConnectivityResult> input,
       bool cancelOnError,
     ) {
-      StreamController<ConnectivityResult> controller;
-      StreamSubscription<ConnectivityResult> subscription;
+      StreamController<ConnectivityResult>? controller;
+      late StreamSubscription<ConnectivityResult> subscription;
 
       controller = StreamController<ConnectivityResult>(
         sync: true,
         onListen: () => controller?.add(data),
-        onPause: ([Future<dynamic> resumeSignal]) => subscription.pause(resumeSignal),
+        onPause: ([Future<dynamic>? resumeSignal]) => subscription.pause(resumeSignal),
         onResume: () => subscription.resume(),
         onCancel: () => subscription.cancel(),
       );

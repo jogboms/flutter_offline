@@ -46,40 +46,6 @@ void main() {
   });
 
   group('Test Assertions', () {
-    testWidgets('Test no debounceDuration param', (WidgetTester tester) async {
-      expect(() {
-        OfflineBuilder.initialize(
-          connectivityService: TestConnectivityService(ConnectivityResult.none),
-          wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, __, Widget child) => child,
-          debounceDuration: null,
-          builder: (BuildContext context) => Text('builder_result'),
-        );
-      }, throwsAssertionError);
-    });
-
-    testWidgets('Test no connectivityBuilder param', (WidgetTester tester) async {
-      expect(() {
-        OfflineBuilder.initialize(
-          connectivityService: TestConnectivityService(ConnectivityResult.none),
-          wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: null,
-          child: const Text('child_result'),
-        );
-      }, throwsAssertionError);
-    });
-
-    testWidgets('Test no connectivityService param', (WidgetTester tester) async {
-      expect(() {
-        OfflineBuilder.initialize(
-          connectivityService: null,
-          wifiInfo: null,
-          connectivityBuilder: (_, __, Widget child) => child,
-          child: const Text('child_result'),
-        );
-      }, throwsAssertionError);
-    });
-
     testWidgets('Test builder & child param', (WidgetTester tester) async {
       expect(() {
         OfflineBuilder.initialize(
@@ -257,9 +223,9 @@ void main() {
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
           connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
-          child: const SizedBox(),
           debounceDuration: Duration.zero,
           errorBuilder: (context) => Text('Error'),
+          child: const SizedBox(),
         ),
       ));
 
@@ -274,16 +240,16 @@ void main() {
 }
 
 class TestConnectivityService implements Connectivity {
-  TestConnectivityService([this.initialConnection]) {
-    _result = initialConnection;
+  TestConnectivityService([this.initialConnection]) : _result = initialConnection ?? ConnectivityResult.none {
     controller = StreamController<ConnectivityResult>.broadcast(
       onListen: () => controller.add(_result),
     );
   }
 
-  StreamController<ConnectivityResult> controller;
-  ConnectivityResult _result = ConnectivityResult.none;
-  final ConnectivityResult initialConnection;
+  late final StreamController<ConnectivityResult> controller;
+  final ConnectivityResult? initialConnection;
+
+  ConnectivityResult _result;
 
   set result(ConnectivityResult result) {
     _result = result;
@@ -297,7 +263,7 @@ class TestConnectivityService implements Connectivity {
 
   @override
   Future<ConnectivityResult> checkConnectivity() {
-    return Future.delayed(Duration.zero, () => initialConnection);
+    return Future.delayed(Duration.zero, () => initialConnection!);
   }
 }
 

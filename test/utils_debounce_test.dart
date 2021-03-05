@@ -4,7 +4,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Future<void> waitForTimer(int milliseconds) => Future<void>(() {/* ensure Timer is started*/}).then<void>(
+Future<void> waitForTimer(int milliseconds) => Future<void>(() {
+      /* ensure Timer is started*/
+    })
+        .then<void>(
       (_) => Future<void>.delayed(Duration(milliseconds: milliseconds + 1)),
     );
 
@@ -12,13 +15,13 @@ void main() {
   final stream = () => StreamController<ConnectivityResult>.broadcast();
 
   group('Group', () {
-    StreamController<ConnectivityResult> values;
-    List emittedValues;
-    bool valuesCanceled;
-    bool isDone;
-    List errors;
-    StreamSubscription subscription;
-    Stream transformed;
+    late StreamController<ConnectivityResult> values;
+    late List emittedValues;
+    late bool valuesCanceled;
+    late bool isDone;
+    late List errors;
+    late StreamSubscription subscription;
+    late Stream transformed;
 
     void setUpStreams(StreamTransformer transformer) {
       valuesCanceled = false;
@@ -29,7 +32,7 @@ void main() {
       emittedValues = <ConnectivityResult>[];
       errors = <ConnectivityResult>[];
       isDone = false;
-      transformed = values.stream.transform<void>(transformer);
+      transformed = values.stream.transform<void>(transformer as StreamTransformer<ConnectivityResult, void>);
       subscription = transformed.listen(emittedValues.add, onError: errors.add, onDone: () {
         isDone = true;
       });

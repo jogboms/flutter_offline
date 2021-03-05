@@ -6,15 +6,16 @@ import 'package:flutter_offline/src/utils.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
 const kOfflineDebounceDuration = Duration(seconds: 3);
+typedef ValueWidgetBuilder<T> = Widget Function(BuildContext context, T value, Widget child);
 
 class OfflineBuilder extends StatefulWidget {
   factory OfflineBuilder({
-    Key key,
-    @required ValueWidgetBuilder<ConnectivityResult> connectivityBuilder,
+    Key? key,
+    required ValueWidgetBuilder<ConnectivityResult> connectivityBuilder,
     Duration debounceDuration = kOfflineDebounceDuration,
-    WidgetBuilder builder,
-    Widget child,
-    WidgetBuilder errorBuilder,
+    WidgetBuilder? builder,
+    Widget? child,
+    WidgetBuilder? errorBuilder,
   }) {
     return OfflineBuilder.initialize(
       key: key,
@@ -23,25 +24,22 @@ class OfflineBuilder extends StatefulWidget {
       wifiInfo: WifiInfo(),
       debounceDuration: debounceDuration,
       builder: builder,
-      child: child,
       errorBuilder: errorBuilder,
+      child: child,
     );
   }
 
   @visibleForTesting
   OfflineBuilder.initialize({
-    Key key,
-    @required this.connectivityBuilder,
-    @required this.connectivityService,
-    @required this.wifiInfo,
+    Key? key,
+    required this.connectivityBuilder,
+    required this.connectivityService,
+    required this.wifiInfo,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
     this.child,
     this.errorBuilder,
-  })  : assert(connectivityBuilder != null, 'connectivityBuilder cannot be null'),
-        assert(debounceDuration != null, 'debounceDuration cannot be null'),
-        assert(connectivityService != null, 'connectivityService cannot be null'),
-        assert(!(builder is WidgetBuilder && child is Widget) && !(builder == null && child == null),
+  })  : assert(!(builder is WidgetBuilder && child is Widget) && !(builder == null && child == null),
             'You should specify either a builder or a child'),
         super(key: key);
 
@@ -57,20 +55,20 @@ class OfflineBuilder extends StatefulWidget {
   final ValueWidgetBuilder<ConnectivityResult> connectivityBuilder;
 
   /// Used for building the child widget
-  final WidgetBuilder builder;
+  final WidgetBuilder? builder;
 
   /// The widget below this widget in the tree.
-  final Widget child;
+  final Widget? child;
 
   /// Used for building the error widget incase of any platform errors
-  final WidgetBuilder errorBuilder;
+  final WidgetBuilder? errorBuilder;
 
   @override
   OfflineBuilderState createState() => OfflineBuilderState();
 }
 
 class OfflineBuilderState extends State<OfflineBuilder> {
-  Stream<ConnectivityResult> _connectivityStream;
+  late Stream<ConnectivityResult> _connectivityStream;
 
   @override
   void initState() {
@@ -92,12 +90,12 @@ class OfflineBuilderState extends State<OfflineBuilder> {
 
         if (snapshot.hasError) {
           if (widget.errorBuilder != null) {
-            return widget.errorBuilder(context);
+            return widget.errorBuilder!(context);
           }
-          throw OfflineBuilderError(snapshot.error);
+          throw OfflineBuilderError(snapshot.error!);
         }
 
-        return widget.connectivityBuilder(context, snapshot.data, widget.child ?? widget.builder(context));
+        return widget.connectivityBuilder(context, snapshot.data!, widget.child ?? widget.builder!(context));
       },
     );
   }
