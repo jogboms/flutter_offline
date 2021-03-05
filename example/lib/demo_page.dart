@@ -12,7 +12,7 @@ class DemoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Offline Demo"),
+        title: Text('Offline Demo'),
       ),
       body: child,
     );

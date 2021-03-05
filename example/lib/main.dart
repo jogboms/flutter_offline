@@ -18,23 +18,23 @@ class MyApp extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
-                child: Text("Demo 1"),
+              ElevatedButton(
                 onPressed: () {
                   navigate(context, Demo1());
                 },
+                child: Text('Demo 1'),
               ),
-              RaisedButton(
-                child: Text("Demo 2"),
+              ElevatedButton(
                 onPressed: () {
                   navigate(context, Demo2());
                 },
+                child: Text('Demo 2'),
               ),
-              RaisedButton(
-                child: Text("Demo 3"),
+              ElevatedButton(
                 onPressed: () {
                   navigate(context, Demo3());
                 },
+                child: Text('Demo 3'),
               ),
             ],
           );
