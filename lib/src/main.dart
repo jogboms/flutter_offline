@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/src/utils.dart';
+import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
 const kOfflineDebounceDuration = Duration(seconds: 3);
 
@@ -19,6 +20,7 @@ class OfflineBuilder extends StatefulWidget {
       key: key,
       connectivityBuilder: connectivityBuilder,
       connectivityService: Connectivity(),
+      wifiInfo: WifiInfo(),
       debounceDuration: debounceDuration,
       builder: builder,
       child: child,
@@ -31,6 +33,7 @@ class OfflineBuilder extends StatefulWidget {
     Key key,
     @required this.connectivityBuilder,
     @required this.connectivityService,
+    @required this.wifiInfo,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
     this.child,
@@ -44,6 +47,8 @@ class OfflineBuilder extends StatefulWidget {
 
   /// Override connectivity service used for testing
   final Connectivity connectivityService;
+
+  final WifiInfo wifiInfo;
 
   /// Debounce duration from epileptic network situations
   final Duration debounceDuration;

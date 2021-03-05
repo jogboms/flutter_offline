@@ -5,7 +5,7 @@ import 'package:connectivity/connectivity.dart';
 StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   Duration debounceDuration,
 ) {
-  bool _seenFirstData = false;
+  var _seenFirstData = false;
   Timer _debounceTimer;
 
   return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
