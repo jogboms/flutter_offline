@@ -7,14 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final stream = () => StreamController<ConnectivityResult>();
 
-  StreamController<ConnectivityResult> values;
-  List<ConnectivityResult> emittedValues;
-  bool valuesCanceled;
-  bool valuesPaused;
-  bool valuesResume;
-  StreamSubscription<ConnectivityResult> subscription;
+  late StreamController<ConnectivityResult> values;
+  late List<ConnectivityResult> emittedValues;
+  late bool valuesCanceled;
+  late bool valuesPaused;
+  late bool valuesResume;
+  late StreamSubscription<ConnectivityResult> subscription;
   // bool isDone;
-  List errors;
+  late List errors;
 
   void setupForStreamType(StreamTransformer transformer) {
     emittedValues = <ConnectivityResult>[];
@@ -32,7 +32,7 @@ void main() {
         valuesCanceled = true;
       };
     subscription = values.stream
-        .transform<ConnectivityResult>(transformer)
+        .transform<ConnectivityResult>(transformer as StreamTransformer<ConnectivityResult, ConnectivityResult>)
         .listen(emittedValues.add, onError: errors.add, onDone: () {
       // isDone = true;
     });
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('addError values', () async {
-      values..addError(45);
+      values.addError(45);
       await Future(() {});
       expect(errors.length, isNonZero);
     });
