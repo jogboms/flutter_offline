@@ -15,7 +15,7 @@ class Demo2 extends StatelessWidget {
             color: Colors.white,
             child: Center(
               child: Text(
-                "Oops, \n\nNow we are Offline!",
+                'Oops, \n\nNow we are Offline!',
                 style: TextStyle(color: Colors.black),
               ),
             ),

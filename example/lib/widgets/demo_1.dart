@@ -10,7 +10,7 @@ class Demo1 extends StatelessWidget {
         ConnectivityResult connectivity,
         Widget child,
       ) {
-        final bool connected = connectivity != ConnectivityResult.none;
+        final connected = connectivity != ConnectivityResult.none;
         return Stack(
           fit: StackFit.expand,
           children: [

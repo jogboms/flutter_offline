@@ -16,7 +16,7 @@ class Demo3 extends StatelessWidget {
             color: Colors.white70,
             child: Center(
               child: Text(
-                "Oops, \n\nWe experienced a Delayed Offline!",
+                'Oops, \n\nWe experienced a Delayed Offline!',
                 style: TextStyle(color: Colors.black),
               ),
             ),

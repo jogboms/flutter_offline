@@ -8,7 +8,7 @@ A tidy utility to handle offline/online connectivity like a Boss. It provides su
 
 ```yaml
 dependencies:
-  flutter_offline: "^0.3.0"
+  flutter_offline: "^1.0.0"
 ```
 
 ### ⚡️ Import
