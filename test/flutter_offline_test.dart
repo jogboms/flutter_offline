@@ -58,8 +58,7 @@ void main() {
       }, throwsAssertionError);
     });
 
-    testWidgets('Test no connectivityBuilder param',
-        (WidgetTester tester) async {
+    testWidgets('Test no connectivityBuilder param', (WidgetTester tester) async {
       expect(() {
         OfflineBuilder.initialize(
           connectivityService: TestConnectivityService(ConnectivityResult.none),
@@ -70,8 +69,7 @@ void main() {
       }, throwsAssertionError);
     });
 
-    testWidgets('Test no connectivityService param',
-        (WidgetTester tester) async {
+    testWidgets('Test no connectivityService param', (WidgetTester tester) async {
       expect(() {
         OfflineBuilder.initialize(
           connectivityService: null,
@@ -111,8 +109,7 @@ void main() {
         home: OfflineBuilder.initialize(
           connectivityService: TestConnectivityService(ConnectivityResult.none),
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -123,11 +120,9 @@ void main() {
     testWidgets('Test builder online', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
         home: OfflineBuilder.initialize(
-          connectivityService:
-              TestConnectivityService(ConnectivityResult.mobile),
+          connectivityService: TestConnectivityService(ConnectivityResult.mobile),
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -137,15 +132,13 @@ void main() {
   });
 
   group('Test Flipper', () {
-    testWidgets('Test builder flips online to offline',
-        (WidgetTester tester) async {
+    testWidgets('Test builder flips online to offline', (WidgetTester tester) async {
       final service = TestConnectivityService(ConnectivityResult.mobile);
       await tester.pumpWidget(MaterialApp(
         home: OfflineBuilder.initialize(
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -158,15 +151,13 @@ void main() {
       expect(find.text('ConnectivityResult.none'), findsOneWidget);
     });
 
-    testWidgets('Test builder flips offline to online',
-        (WidgetTester tester) async {
+    testWidgets('Test builder flips offline to online', (WidgetTester tester) async {
       final service = TestConnectivityService(ConnectivityResult.none);
       await tester.pumpWidget(MaterialApp(
         home: OfflineBuilder.initialize(
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -189,8 +180,7 @@ void main() {
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
           debounceDuration: debounceDuration,
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -217,8 +207,7 @@ void main() {
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
           debounceDuration: debounceDuration,
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
         ),
       ));
@@ -246,8 +235,7 @@ void main() {
         home: OfflineBuilder.initialize(
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           debounceDuration: Duration.zero,
           child: const SizedBox(),
         ),
@@ -268,8 +256,7 @@ void main() {
         home: OfflineBuilder.initialize(
           connectivityService: service,
           wifiInfo: TestWifiInfoService(),
-          connectivityBuilder: (_, ConnectivityResult connectivity, __) =>
-              Text('$connectivity'),
+          connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           child: const SizedBox(),
           debounceDuration: Duration.zero,
           errorBuilder: (context) => Text('Error'),
@@ -324,9 +311,8 @@ class TestWifiInfoService implements wifi.WifiInfo {
   Future<String> getWifiName() async => 'Localhost';
 
   @override
-  Future<wifi.LocationAuthorizationStatus>
-      getLocationServiceAuthorization() async =>
-          wifi.LocationAuthorizationStatus.authorizedAlways;
+  Future<wifi.LocationAuthorizationStatus> getLocationServiceAuthorization() async =>
+      wifi.LocationAuthorizationStatus.authorizedAlways;
 
   @override
   Future<String> getWifiBSSID() async => '';

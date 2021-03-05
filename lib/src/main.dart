@@ -38,14 +38,10 @@ class OfflineBuilder extends StatefulWidget {
     this.builder,
     this.child,
     this.errorBuilder,
-  })  : assert(
-            connectivityBuilder != null, 'connectivityBuilder cannot be null'),
+  })  : assert(connectivityBuilder != null, 'connectivityBuilder cannot be null'),
         assert(debounceDuration != null, 'debounceDuration cannot be null'),
-        assert(
-            connectivityService != null, 'connectivityService cannot be null'),
-        assert(
-            !(builder is WidgetBuilder && child is Widget) &&
-                !(builder == null && child == null),
+        assert(connectivityService != null, 'connectivityService cannot be null'),
+        assert(!(builder is WidgetBuilder && child is Widget) && !(builder == null && child == null),
             'You should specify either a builder or a child'),
         super(key: key);
 
@@ -80,20 +76,16 @@ class OfflineBuilderState extends State<OfflineBuilder> {
   void initState() {
     super.initState();
 
-    _connectivityStream =
-        Stream.fromFuture(widget.connectivityService.checkConnectivity())
-            .asyncExpand((data) => widget
-                .connectivityService.onConnectivityChanged
-                .transform(startsWith(data)))
-            .transform(debounce(widget.debounceDuration));
+    _connectivityStream = Stream.fromFuture(widget.connectivityService.checkConnectivity())
+        .asyncExpand((data) => widget.connectivityService.onConnectivityChanged.transform(startsWith(data)))
+        .transform(debounce(widget.debounceDuration));
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ConnectivityResult>(
       stream: _connectivityStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
         }
@@ -105,8 +97,7 @@ class OfflineBuilderState extends State<OfflineBuilder> {
           throw OfflineBuilderError(snapshot.error);
         }
 
-        return widget.connectivityBuilder(
-            context, snapshot.data, widget.child ?? widget.builder(context));
+        return widget.connectivityBuilder(context, snapshot.data, widget.child ?? widget.builder(context));
       },
     );
   }
