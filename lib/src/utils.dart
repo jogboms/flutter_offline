@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   Duration debounceDuration,
@@ -39,7 +39,8 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
       controller = StreamController<ConnectivityResult>(
         sync: true,
         onListen: () => controller?.add(data),
-        onPause: ([Future<dynamic>? resumeSignal]) => subscription.pause(resumeSignal),
+        onPause: ([Future<dynamic>? resumeSignal]) =>
+            subscription.pause(resumeSignal),
         onResume: () => subscription.resume(),
         onCancel: () => subscription.cancel(),
       );
