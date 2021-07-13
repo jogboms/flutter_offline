@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_offline/src/utils.dart' as transformers;
 import 'package:flutter_test/flutter_test.dart';
 
@@ -32,7 +32,8 @@ void main() {
         valuesCanceled = true;
       };
     subscription = values.stream
-        .transform<ConnectivityResult>(transformer as StreamTransformer<ConnectivityResult, ConnectivityResult>)
+        .transform<ConnectivityResult>(transformer
+            as StreamTransformer<ConnectivityResult, ConnectivityResult>)
         .listen(emittedValues.add, onError: errors.add, onDone: () {
       // isDone = true;
     });
@@ -69,7 +70,11 @@ void main() {
     test('outputs all values', () async {
       values..add(ConnectivityResult.mobile)..add(ConnectivityResult.wifi);
       await Future(() {});
-      expect(emittedValues, [ConnectivityResult.none, ConnectivityResult.mobile, ConnectivityResult.wifi]);
+      expect(emittedValues, [
+        ConnectivityResult.none,
+        ConnectivityResult.mobile,
+        ConnectivityResult.wifi
+      ]);
     });
 
     test('outputs initial when followed by empty stream', () async {
