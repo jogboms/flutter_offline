@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';
 
 const kOfflineDebounceDuration = Duration(seconds: 3);
-typedef ValueWidgetBuilder<T> = Widget Function(BuildContext context, T value, Widget child);
+typedef ValueWidgetBuilder<T> = Widget Function(
+    BuildContext context, T value, Widget child);
 
 class OfflineBuilder extends StatefulWidget {
   factory OfflineBuilder({
@@ -39,7 +40,9 @@ class OfflineBuilder extends StatefulWidget {
     this.builder,
     this.child,
     this.errorBuilder,
-  })  : assert(!(builder is WidgetBuilder && child is Widget) && !(builder == null && child == null),
+  })  : assert(
+            !(builder is WidgetBuilder && child is Widget) &&
+                !(builder == null && child == null),
             'You should specify either a builder or a child'),
         super(key: key);
 
@@ -74,16 +77,20 @@ class OfflineBuilderState extends State<OfflineBuilder> {
   void initState() {
     super.initState();
 
-    _connectivityStream = Stream.fromFuture(widget.connectivityService.checkConnectivity())
-        .asyncExpand((data) => widget.connectivityService.onConnectivityChanged.transform(startsWith(data)))
-        .transform(debounce(widget.debounceDuration));
+    _connectivityStream =
+        Stream.fromFuture(widget.connectivityService.checkConnectivity())
+            .asyncExpand((data) => widget
+                .connectivityService.onConnectivityChanged
+                .transform(startsWith(data)))
+            .transform(debounce(widget.debounceDuration));
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ConnectivityResult>(
       stream: _connectivityStream,
-      builder: (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
         }
@@ -95,7 +102,8 @@ class OfflineBuilderState extends State<OfflineBuilder> {
           throw OfflineBuilderError(snapshot.error!);
         }
 
-        return widget.connectivityBuilder(context, snapshot.data!, widget.child ?? widget.builder!(context));
+        return widget.connectivityBuilder(
+            context, snapshot.data!, widget.child ?? widget.builder!(context));
       },
     );
   }

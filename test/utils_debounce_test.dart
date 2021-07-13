@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -32,8 +32,10 @@ void main() {
       emittedValues = <ConnectivityResult>[];
       errors = <ConnectivityResult>[];
       isDone = false;
-      transformed = values.stream.transform<void>(transformer as StreamTransformer<ConnectivityResult, void>);
-      subscription = transformed.listen(emittedValues.add, onError: errors.add, onDone: () {
+      transformed = values.stream.transform<void>(
+          transformer as StreamTransformer<ConnectivityResult, void>);
+      subscription = transformed.listen(emittedValues.add, onError: errors.add,
+          onDone: () {
         isDone = true;
       });
     }

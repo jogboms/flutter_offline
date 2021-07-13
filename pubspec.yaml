@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  connectivity: ^3.0.2
+  connectivity_plus: ^1.0.5
   wifi_info_flutter: ^2.0.0
 
 dev_dependencies:
