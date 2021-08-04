@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart';

@@ -1,6 +1,6 @@
 name: flutter_offline
 description: A tidy utility to handle offline/online connectivity like a Boss.
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/jogboms/flutter_offline
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  connectivity: ^3.0.2
+  connectivity_plus: ^1.0.6
   wifi_info_flutter: ^2.0.0
 
 dev_dependencies:
