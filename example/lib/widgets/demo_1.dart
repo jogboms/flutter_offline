@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
 class Demo1 extends StatelessWidget {
+  const Demo1({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return OfflineBuilder(
@@ -21,14 +23,14 @@ class Demo1 extends StatelessWidget {
               right: 0.0,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 350),
-                color: connected ? Color(0xFF00EE44) : Color(0xFFEE4400),
+                color: connected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 350),
                   child: connected
-                      ? Text('ONLINE')
+                      ? const Text('ONLINE')
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text('OFFLINE'),
                             SizedBox(width: 8.0),
                             SizedBox(
@@ -49,7 +51,7 @@ class Demo1 extends StatelessWidget {
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: const <Widget>[
           Text(
             'There are no bottons to push :)',
           ),

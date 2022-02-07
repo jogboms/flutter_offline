@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
 class Demo3 extends StatelessWidget {
+  const Demo3({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return OfflineBuilder(
@@ -14,7 +16,7 @@ class Demo3 extends StatelessWidget {
         if (connectivity == ConnectivityResult.none) {
           return Container(
             color: Colors.white70,
-            child: Center(
+            child: const Center(
               child: Text(
                 'Oops, \n\nWe experienced a Delayed Offline!',
                 style: TextStyle(color: Colors.black),
@@ -27,7 +29,7 @@ class Demo3 extends StatelessWidget {
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: const <Widget>[
             Text(
               'There are no bottons to push :)',
             ),

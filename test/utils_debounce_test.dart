@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_offline/src/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ Future<void> waitForTimer(int milliseconds) => Future<void>(() {
     );
 
 void main() {
-  final stream = () => StreamController<ConnectivityResult>.broadcast();
+  StreamController<ConnectivityResult> stream() => StreamController<ConnectivityResult>.broadcast();
 
   group('Group', () {
     late StreamController<ConnectivityResult> values;

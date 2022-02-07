@@ -51,7 +51,7 @@ packages:
     source: hosted
     version: "1.15.0"
   connectivity_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
@@ -125,6 +125,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  flutter_offline:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "2.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -164,7 +171,7 @@ packages:
     source: hosted
     version: "1.7.0"
   network_info_plus:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: network_info_plus
       url: "https://pub.dartlang.org"
@@ -190,7 +197,7 @@ packages:
       name: network_info_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   network_info_plus_web:
     dependency: transitive
     description:
@@ -232,7 +239,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -302,5 +309,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.15.0 <3.0.0"
   flutter: ">=2.0.0"

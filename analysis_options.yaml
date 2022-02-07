@@ -1,1 +1,43 @@
-include: package:pedantic/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    missing_required_param: error
+    missing_return: error
+    unused_import: error
+    unused_local_variable: error
+    dead_code: error
+    todo: ignore
+
+linter:
+  rules:
+    # All rules from pedantic, already enabled rules are left out
+    # https://github.com/google/pedantic/blob/master/lib/analysis_options.1.11.0.yaml
+    - always_declare_return_types
+    - prefer_single_quotes
+    - unawaited_futures
+
+    # Additional rules from https://github.com/flutter/flutter/blob/master/analysis_options.yaml
+    # Not all rules are included
+    - always_put_control_body_on_new_line
+    - avoid_slow_async_io
+    - cast_nullable_to_non_nullable
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_if_elements_to_conditional_expressions
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - test_types_in_equals
+    - tighten_type_of_initializing_formals
+    - unnecessary_await_in_return
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_statements
+    - use_late_for_private_fields_and_variables
+    - use_named_constants
+    - use_raw_strings
