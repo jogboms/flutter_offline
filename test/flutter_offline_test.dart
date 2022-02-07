@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wifi_info_flutter/wifi_info_flutter.dart' as wifi;
@@ -12,7 +11,7 @@ void main() {
     testWidgets('Test w/ factory OfflineBuilder', (WidgetTester tester) async {
       final instance = OfflineBuilder(
         connectivityBuilder: (_, __, Widget child) => child,
-        builder: (BuildContext context) => Text('builder_result'),
+        builder: (BuildContext context) => const Text('builder_result'),
       );
 
       expect(instance.connectivityService, isInstanceOf<Connectivity>());
@@ -24,7 +23,7 @@ void main() {
           connectivityService: TestConnectivityService(ConnectivityResult.none),
           wifiInfo: TestWifiInfoService(),
           connectivityBuilder: (_, __, Widget child) => child,
-          builder: (BuildContext context) => Text('builder_result'),
+          builder: (BuildContext context) => const Text('builder_result'),
         ),
       ));
       await tester.pump(kOfflineDebounceDuration);
@@ -52,7 +51,7 @@ void main() {
           connectivityService: TestConnectivityService(ConnectivityResult.none),
           wifiInfo: TestWifiInfoService(),
           connectivityBuilder: (_, __, Widget child) => child,
-          builder: (BuildContext context) => Text('builder_result'),
+          builder: (BuildContext context) => const Text('builder_result'),
           child: const Text('child_result'),
         );
       }, throwsAssertionError);
@@ -224,7 +223,7 @@ void main() {
           wifiInfo: TestWifiInfoService(),
           connectivityBuilder: (_, ConnectivityResult connectivity, __) => Text('$connectivity'),
           debounceDuration: Duration.zero,
-          errorBuilder: (context) => Text('Error'),
+          errorBuilder: (context) => const Text('Error'),
           child: const SizedBox(),
         ),
       ));

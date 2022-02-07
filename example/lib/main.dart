@@ -5,9 +5,11 @@ import './widgets/demo_1.dart';
 import './widgets/demo_2.dart';
 import './widgets/demo_3.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,21 +22,21 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               ElevatedButton(
                 onPressed: () {
-                  navigate(context, Demo1());
+                  navigate(context, const Demo1());
                 },
-                child: Text('Demo 1'),
+                child: const Text('Demo 1'),
               ),
               ElevatedButton(
                 onPressed: () {
-                  navigate(context, Demo2());
+                  navigate(context, const Demo2());
                 },
-                child: Text('Demo 2'),
+                child: const Text('Demo 2'),
               ),
               ElevatedButton(
                 onPressed: () {
-                  navigate(context, Demo3());
+                  navigate(context, const Demo3());
                 },
-                child: Text('Demo 3'),
+                child: const Text('Demo 3'),
               ),
             ],
           );

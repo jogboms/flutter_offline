@@ -12,7 +12,7 @@ Future<void> waitForTimer(int milliseconds) => Future<void>(() {
     );
 
 void main() {
-  final stream = () => StreamController<ConnectivityResult>.broadcast();
+  StreamController<ConnectivityResult> stream() => StreamController<ConnectivityResult>.broadcast();
 
   group('Group', () {
     late StreamController<ConnectivityResult> values;

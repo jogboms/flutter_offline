@@ -5,7 +5,7 @@ import 'package:flutter_offline/src/utils.dart' as transformers;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final stream = () => StreamController<ConnectivityResult>();
+  StreamController<ConnectivityResult> stream() => StreamController<ConnectivityResult>();
 
   late StreamController<ConnectivityResult> values;
   late List<ConnectivityResult> emittedValues;
@@ -67,7 +67,9 @@ void main() {
     });
 
     test('outputs all values', () async {
-      values..add(ConnectivityResult.mobile)..add(ConnectivityResult.wifi);
+      values
+        ..add(ConnectivityResult.mobile)
+        ..add(ConnectivityResult.wifi);
       await Future(() {});
       expect(emittedValues, [ConnectivityResult.none, ConnectivityResult.mobile, ConnectivityResult.wifi]);
     });

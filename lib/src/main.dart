@@ -30,7 +30,7 @@ class OfflineBuilder extends StatefulWidget {
   }
 
   @visibleForTesting
-  OfflineBuilder.initialize({
+  const OfflineBuilder.initialize({
     Key? key,
     required this.connectivityBuilder,
     required this.connectivityService,
