@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   Duration debounceDuration,
