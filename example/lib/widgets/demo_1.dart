@@ -28,9 +28,9 @@ class Demo1 extends StatelessWidget {
                   duration: const Duration(milliseconds: 350),
                   child: connected
                       ? const Text('ONLINE')
-                      : Row(
+                      : const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text('OFFLINE'),
                             SizedBox(width: 8.0),
                             SizedBox(
@@ -49,9 +49,9 @@ class Demo1 extends StatelessWidget {
           ],
         );
       },
-      child: Column(
+      child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
+        children: <Widget>[
           Text(
             'There are no bottons to push :)',
           ),
