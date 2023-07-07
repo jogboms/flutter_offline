@@ -5,21 +5,21 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
   Duration debounceDuration,
 ) {
-  var _seenFirstData = false;
-  Timer? _debounceTimer;
+  var seenFirstData = false;
+  Timer? debounceTimer;
 
   return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
     handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
-      if (_seenFirstData) {
-        _debounceTimer?.cancel();
-        _debounceTimer = Timer(debounceDuration, () => sink.add(data));
+      if (seenFirstData) {
+        debounceTimer?.cancel();
+        debounceTimer = Timer(debounceDuration, () => sink.add(data));
       } else {
         sink.add(data);
-        _seenFirstData = true;
+        seenFirstData = true;
       }
     },
     handleDone: (EventSink<ConnectivityResult> sink) {
-      _debounceTimer?.cancel();
+      debounceTimer?.cancel();
       sink.close();
     },
   );

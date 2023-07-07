@@ -27,10 +27,10 @@ class Demo2 extends StatelessWidget {
         }
       },
       builder: (BuildContext context) {
-        return Center(
+        return const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
+            children: <Widget>[
               Text(
                 'There are no bottons to push :)',
               ),
