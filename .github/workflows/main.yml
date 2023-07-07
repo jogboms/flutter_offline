@@ -23,7 +23,8 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          channel: "dev"
+          channel: 'stable'
+          flutter-version: '3.10.5'
       - run: flutter pub get
       - run: flutter format --set-exit-if-changed -l 120 lib -l 120 example
       - run: flutter analyze lib example
