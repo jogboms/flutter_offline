@@ -4,6 +4,7 @@ import './demo_page.dart';
 import './widgets/demo_1.dart';
 import './widgets/demo_2.dart';
 import './widgets/demo_3.dart';
+import './widgets/demo_4.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,6 +38,12 @@ class MyApp extends StatelessWidget {
                   navigate(context, const Demo3());
                 },
                 child: const Text('Demo 3'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  navigate(context, const Demo4());
+                },
+                child: const Text('Listener Demo'),
               ),
             ],
           );
