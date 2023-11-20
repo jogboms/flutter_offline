@@ -1,3 +1,7 @@
+## [3.0.1]
+
+Bump `package:connectivity_plus` to `^5.0.1`
+
 ## [3.0.0]
 
 Bumped dependencies to support Flutter 3 with Dart 3
