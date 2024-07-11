@@ -5,19 +5,19 @@ import 'package:flutter_offline/src/utils.dart' as transformers;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  StreamController<ConnectivityResult> stream() => StreamController<ConnectivityResult>();
+  StreamController<List<ConnectivityResult>> stream() => StreamController<List<ConnectivityResult>>();
 
-  late StreamController<ConnectivityResult> values;
-  late List<ConnectivityResult> emittedValues;
+  late StreamController<List<ConnectivityResult>> values;
+  late List<List<ConnectivityResult>> emittedValues;
   late bool valuesCanceled;
   late bool valuesPaused;
   late bool valuesResume;
-  late StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<List<ConnectivityResult>> subscription;
   // bool isDone;
   late List errors;
 
   void setupForStreamType(StreamTransformer transformer) {
-    emittedValues = <ConnectivityResult>[];
+    emittedValues = <List<ConnectivityResult>>[];
     valuesCanceled = false;
     errors = <dynamic>[];
     // isDone = false;
@@ -32,7 +32,7 @@ void main() {
         valuesCanceled = true;
       };
     subscription = values.stream
-        .transform<ConnectivityResult>(transformer as StreamTransformer<ConnectivityResult, ConnectivityResult>)
+        .transform<List<ConnectivityResult>>(transformer as StreamTransformer<List<ConnectivityResult>, List<ConnectivityResult>>)
         .listen(emittedValues.add, onError: errors.add, onDone: () {
       // isDone = true;
     });
@@ -40,7 +40,7 @@ void main() {
 
   group('startWith', () {
     setUp(() {
-      setupForStreamType(transformers.startsWith(ConnectivityResult.none));
+      setupForStreamType(transformers.startsWith([ConnectivityResult.none]));
     });
 
     test('cancels values', () async {
@@ -63,20 +63,20 @@ void main() {
 
     test('outputs initial value', () async {
       await Future(() {});
-      expect(emittedValues, [ConnectivityResult.none]);
+      expect(emittedValues, [[ConnectivityResult.none]]);
     });
 
     test('outputs all values', () async {
       values
-        ..add(ConnectivityResult.mobile)
-        ..add(ConnectivityResult.wifi);
+        ..add([ConnectivityResult.mobile])
+        ..add([ConnectivityResult.wifi]);
       await Future(() {});
-      expect(emittedValues, [ConnectivityResult.none, ConnectivityResult.mobile, ConnectivityResult.wifi]);
+      expect(emittedValues, [[ConnectivityResult.none], [ConnectivityResult.mobile], [ConnectivityResult.wifi]]);
     });
 
     test('outputs initial when followed by empty stream', () async {
       await values.close();
-      expect(emittedValues, [ConnectivityResult.none]);
+      expect(emittedValues, [[ConnectivityResult.none]]);
     });
 
     // test('closes with values', () async {
