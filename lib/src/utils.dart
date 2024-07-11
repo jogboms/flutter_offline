@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
+StreamTransformer<List<ConnectivityResult>, List<ConnectivityResult>> debounce(
   Duration debounceDuration,
 ) {
   var seenFirstData = false;
   Timer? debounceTimer;
 
-  return StreamTransformer<ConnectivityResult, ConnectivityResult>.fromHandlers(
-    handleData: (ConnectivityResult data, EventSink<ConnectivityResult> sink) {
+  return StreamTransformer<List<ConnectivityResult>, List<ConnectivityResult>>.fromHandlers(
+    handleData: (List<ConnectivityResult> data, EventSink<List<ConnectivityResult>> sink) {
       if (seenFirstData) {
         debounceTimer?.cancel();
         debounceTimer = Timer(debounceDuration, () => sink.add(data));
@@ -18,25 +18,25 @@ StreamTransformer<ConnectivityResult, ConnectivityResult> debounce(
         seenFirstData = true;
       }
     },
-    handleDone: (EventSink<ConnectivityResult> sink) {
+    handleDone: (EventSink<List<ConnectivityResult>> sink) {
       debounceTimer?.cancel();
       sink.close();
     },
   );
 }
 
-StreamTransformer<ConnectivityResult, ConnectivityResult> startsWith(
-  ConnectivityResult data,
+StreamTransformer<List<ConnectivityResult>, List<ConnectivityResult>> startsWith(
+  List<ConnectivityResult> data,
 ) {
-  return StreamTransformer<ConnectivityResult, ConnectivityResult>(
+  return StreamTransformer<List<ConnectivityResult>, List<ConnectivityResult>>(
     (
-      Stream<ConnectivityResult> input,
+      Stream<List<ConnectivityResult>> input,
       bool cancelOnError,
     ) {
-      StreamController<ConnectivityResult>? controller;
-      late StreamSubscription<ConnectivityResult> subscription;
+      StreamController<List<ConnectivityResult>>? controller;
+      late StreamSubscription<List<ConnectivityResult>> subscription;
 
-      controller = StreamController<ConnectivityResult>(
+      controller = StreamController<List<ConnectivityResult>>(
         sync: true,
         onListen: () => controller?.add(data),
         onPause: ([Future<dynamic>? resumeSignal]) => subscription.pause(resumeSignal),

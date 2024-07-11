@@ -12,10 +12,10 @@ Future<void> waitForTimer(int milliseconds) => Future<void>(() {
     );
 
 void main() {
-  StreamController<ConnectivityResult> stream() => StreamController<ConnectivityResult>.broadcast();
+  StreamController<List<ConnectivityResult>> stream() => StreamController<List<ConnectivityResult>>.broadcast();
 
   group('Group', () {
-    late StreamController<ConnectivityResult> values;
+    late StreamController<List<ConnectivityResult>> values;
     late List emittedValues;
     late bool valuesCanceled;
     late bool isDone;
@@ -29,10 +29,10 @@ void main() {
         ..onCancel = () {
           valuesCanceled = true;
         };
-      emittedValues = <ConnectivityResult>[];
-      errors = <ConnectivityResult>[];
+      emittedValues = <List<ConnectivityResult>>[];
+      errors = <List<ConnectivityResult>>[];
       isDone = false;
-      transformed = values.stream.transform<void>(transformer as StreamTransformer<ConnectivityResult, void>);
+      transformed = values.stream.transform<void>(transformer as StreamTransformer<List<ConnectivityResult>, void>);
       subscription = transformed.listen(emittedValues.add, onError: errors.add, onDone: () {
         isDone = true;
       });
@@ -49,26 +49,26 @@ void main() {
       });
 
       test('swallows values that come faster than duration', () async {
-        values.add(ConnectivityResult.mobile);
-        values.add(ConnectivityResult.wifi);
+        values.add([ConnectivityResult.mobile]);
+        values.add([ConnectivityResult.wifi]);
         await values.close();
         await waitForTimer(5);
-        expect(emittedValues, [ConnectivityResult.mobile]);
+        expect(emittedValues, [[ConnectivityResult.mobile]]);
       });
 
       test('outputs multiple values spaced further than duration', () async {
-        values.add(ConnectivityResult.mobile);
+        values.add([ConnectivityResult.mobile]);
         await waitForTimer(5);
-        values.add(ConnectivityResult.wifi);
+        values.add([ConnectivityResult.wifi]);
         await waitForTimer(5);
         expect(
           emittedValues,
-          [ConnectivityResult.mobile, ConnectivityResult.wifi],
+          [[ConnectivityResult.mobile], [ConnectivityResult.wifi]],
         );
       });
 
       test('waits for pending value to close', () async {
-        values.add(ConnectivityResult.mobile);
+        values.add([ConnectivityResult.mobile]);
         await waitForTimer(5);
         await values.close();
         await Future(() {});

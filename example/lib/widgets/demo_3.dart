@@ -10,10 +10,10 @@ class Demo3 extends StatelessWidget {
       debounceDuration: Duration.zero,
       connectivityBuilder: (
         BuildContext context,
-        ConnectivityResult connectivity,
+        List<ConnectivityResult> connectivity,
         Widget child,
       ) {
-        if (connectivity == ConnectivityResult.none) {
+        if (connectivity.contains(ConnectivityResult.none)) {
           return Container(
             color: Colors.white70,
             child: const Center(

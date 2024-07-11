@@ -12,7 +12,7 @@ typedef ValueWidgetBuilder<T> = Widget Function(BuildContext context, T value, W
 class OfflineBuilder extends StatefulWidget {
   factory OfflineBuilder({
     Key? key,
-    required ValueWidgetBuilder<ConnectivityResult> connectivityBuilder,
+    required ValueWidgetBuilder<List<ConnectivityResult>> connectivityBuilder,
     Duration debounceDuration = kOfflineDebounceDuration,
     WidgetBuilder? builder,
     Widget? child,
@@ -53,7 +53,7 @@ class OfflineBuilder extends StatefulWidget {
   final Duration debounceDuration;
 
   /// Used for building the Offline and/or Online UI
-  final ValueWidgetBuilder<ConnectivityResult> connectivityBuilder;
+  final ValueWidgetBuilder<List<ConnectivityResult>> connectivityBuilder;
 
   /// Used for building the child widget
   final WidgetBuilder? builder;
@@ -69,7 +69,7 @@ class OfflineBuilder extends StatefulWidget {
 }
 
 class OfflineBuilderState extends State<OfflineBuilder> {
-  late Stream<ConnectivityResult> _connectivityStream;
+  late Stream<List<ConnectivityResult>> _connectivityStream;
 
   @override
   void initState() {
@@ -82,9 +82,9 @@ class OfflineBuilderState extends State<OfflineBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ConnectivityResult>(
+    return StreamBuilder<List<ConnectivityResult>>(
       stream: _connectivityStream,
-      builder: (BuildContext context, AsyncSnapshot<ConnectivityResult> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<ConnectivityResult>> snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
         }

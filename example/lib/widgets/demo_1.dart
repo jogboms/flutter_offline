@@ -9,10 +9,10 @@ class Demo1 extends StatelessWidget {
     return OfflineBuilder(
       connectivityBuilder: (
         BuildContext context,
-        ConnectivityResult connectivity,
+        List<ConnectivityResult> connectivity,
         Widget child,
       ) {
-        final connected = connectivity != ConnectivityResult.none;
+        final connected = !connectivity.contains(ConnectivityResult.none);
         return Stack(
           fit: StackFit.expand,
           children: [
