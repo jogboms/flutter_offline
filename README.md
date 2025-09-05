@@ -1,6 +1,6 @@
 # ✈️ Flutter Offline
 
-[![Format, Analyze and Test](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml/badge.svg)](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/jogboms/flutter_offline/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
+[![Format, Analyze and Test](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml/badge.sv- 🔄 Backward compatible)](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/jogboms/flutter_offline/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
 
 A tidy utility to handle offline/online connectivity like a Boss. It provides support for both iOS and Android platforms (offcourse).
 
@@ -82,7 +82,54 @@ class DemoPage extends StatelessWidget {
 }
 ```
 
-For more info, please, refer to the `main.dart` in the example.
+### Network State Management with NetworkNotifier
+
+The package now includes `NetworkNotifier` for event-based network state handling with smart debouncing:
+
+```dart
+NetworkNotifier(
+  // Optional: Filter specific network states
+  filter: (status) => status == ConnectivityResult.mobile,
+  
+  // Handle network changes
+  onNetworkChanged: (context, status) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Network changed to: ${status.toString().split('.').last}'),
+      ),
+    );
+  },
+  
+  // Optional: Customize stability duration and debouncing
+  stabilityDuration: Duration(seconds: 2),
+  stateDebounce: {
+    ConnectivityResult.wifi: Duration(milliseconds: 500),    // Faster for WiFi
+    ConnectivityResult.mobile: Duration(seconds: 1),         // Balanced for mobile
+    ConnectivityResult.none: Duration(seconds: 2),           // Conservative for disconnection
+  },
+  
+  child: YourWidget(),
+)
+```
+
+### Key Features
+
+#### OfflineBuilder
+- 🎨 UI-focused connectivity handling
+- 🔄 Reactive widget rebuilding
+- 🎯 Direct access to connectivity state
+
+#### NetworkNotifier
+- 🎯 Event-based network monitoring
+- 🔍 Filtered network state changes
+- ⏱️ Smart debouncing by connection type
+- 🧠 Adaptive state management
+- 🛡️ Notification spam prevention
+- 🎭 Separation of UI and network logic
+- ⚡️ Fully configurable
+- � Backward compatible
+
+For more info and detailed examples, please refer to the `example` folder.
 
 ## 📷 Screenshots
 
