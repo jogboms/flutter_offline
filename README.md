@@ -1,6 +1,6 @@
 # ✈️ Flutter Offline
 
-[![Format, Analyze and Test](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml/badge.sv- 🔄 Backward compatible)](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/jogboms/flutter_offline/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
+[![Format, Analyze and Test](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml/badge.svg)](https://github.com/jogboms/flutter_offline/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/jogboms/flutter_offline/branch/master/graph/badge.svg)](https://codecov.io/gh/jogboms/flutter_offline) [![pub package](https://img.shields.io/pub/v/flutter_offline.svg)](https://pub.dartlang.org/packages/flutter_offline)
 
 A tidy utility to handle offline/online connectivity like a Boss. It provides support for both iOS and Android platforms (offcourse).
 
