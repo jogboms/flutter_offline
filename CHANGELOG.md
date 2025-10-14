@@ -1,3 +1,8 @@
+## [6.0.0]
+
+Bump `package:connectivity_plus` to `^7.0.0`
+Bump `package:network_info_plus` to `^7.0.0`
+
 ## [5.0.0]
 
 Bump `package:connectivity_plus` to `^6.1.4`
