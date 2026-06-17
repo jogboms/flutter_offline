@@ -168,6 +168,93 @@ Run tests with:
 flutter test
 ```
 
+### Widget tests
+
+`OfflineBuilder` waits for the initial connectivity result before rendering its
+child. In widget tests, inject fake connectivity services with
+`OfflineBuilder.initialize` and pump past the debounce duration before using
+finders.
+
+```dart
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:network_info_plus/network_info_plus.dart' as wifi;
+
+void main() {
+  testWidgets('renders the child when online', (tester) async {
+    final connectivity = TestConnectivityService([ConnectivityResult.wifi]);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: OfflineBuilder.initialize(
+          connectivityService: connectivity,
+          wifiInfo: TestNetworkInfoService(),
+          connectivityBuilder: (context, result, child) => child,
+          child: const Text('Home'),
+        ),
+      ),
+    );
+
+    await tester.pump(kOfflineDebounceDuration);
+
+    expect(find.text('Home'), findsOneWidget);
+  });
+}
+
+class TestConnectivityService implements Connectivity {
+  TestConnectivityService(this._result) {
+    controller = StreamController<List<ConnectivityResult>>.broadcast(
+      onListen: () => controller.add(_result),
+    );
+  }
+
+  late final StreamController<List<ConnectivityResult>> controller;
+  List<ConnectivityResult> _result;
+
+  set result(List<ConnectivityResult> result) {
+    _result = result;
+    controller.add(result);
+  }
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => controller.stream;
+
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() async => _result;
+}
+
+class TestNetworkInfoService implements wifi.NetworkInfo {
+  @override
+  Future<String> getWifiIP() async => '127.0.0.1';
+
+  @override
+  Future<String> getWifiName() async => 'Localhost';
+
+  @override
+  Future<String> getWifiBSSID() async => '';
+
+  @override
+  Future<String?> getWifiBroadcast() async => '127.0.0.255';
+
+  @override
+  Future<String?> getWifiGatewayIP() async => '127.0.0.1';
+
+  @override
+  Future<String?> getWifiIPv6() async => '::1';
+
+  @override
+  Future<String?> getWifiSubmask() async => '255.255.255.0';
+}
+```
+
+The `OfflineBuilder.initialize` constructor is intended for tests, so keep the
+injection setup in test files and use the default `OfflineBuilder` constructor in
+production widgets.
+
 ## 📷 Screenshots
 
 <table>
