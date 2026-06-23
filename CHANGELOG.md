@@ -1,4 +1,6 @@
-## [6.1.0]
+## [7.0.0]
+
+Bump `package:network_info_plus` to `^8.0.0`
 
 Added manual retry functionality with exponential backoff:
 - Introduced `OfflineRetryController` extending `ChangeNotifier` for retry state management
